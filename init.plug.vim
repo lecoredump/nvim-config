@@ -8,7 +8,7 @@
 
 "" Handle remote plugins
 function! DoRemote(arg)
-	UpdateRemotePlugins
+    UpdateRemotePlugins
 endfunction
 
 " }
@@ -54,5 +54,20 @@ Plug 'int3/vim-extradite'
 call plug#end()
 " }
 
-" Plugin configuration {
+" Plugins configuration {
+
+"" Completion {
+""" Deoplete {
+let g:deoplete#enable_at_startup = 1
+" Reset omnifuncs
+if !exists('g:deoplete#omni#input_patterns')
+    let g:deoplete#omni#input_patterns = {}
+endif
+
+" Tab completion
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+
+" Default omnifuncs
+""" }
+"" }
 " }
