@@ -24,14 +24,6 @@ endif
 "" Interface {
 set background=dark
 
-""" Solarized config {
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-let g:solarized_contrast="normal"
-let g:solarized_visibility="normal"
-colorscheme solarized
-""" }
-
 set tabpagemax=15
 set cursorline
 highlight clear SignColumn
@@ -61,9 +53,6 @@ if has('statusline')
     " File navigation
     set statusline+=%=%-14.(%l,%c%V%)\ %p%%
     set showmode
-    """" Airline with powerline fonts
-    let g:airline_theme='dark'
-    let g:airline_powerline_fonts = 1
 endif
 """ }
 
@@ -92,11 +81,7 @@ set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
 
 set backspace=indent,eol,start
 set linespace=0
-set incsearch
-set hlsearch
 set winminheight=0
-set ignorecase
-set smartcase
 set wildmenu
 set wildmode=list:longest,full
 """ }
@@ -104,6 +89,9 @@ set wildmode=list:longest,full
 
 "" Search {
 set incsearch
+set hlsearch
+set ignorecase
+set smartcase
 "" }
 
 "" Default mappings (all filetypes) {

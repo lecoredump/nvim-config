@@ -16,58 +16,145 @@ endfunction
 " Plugin loading {
 call plug#begin()
 
-"" Interface {
-""" NERD tree will be loaded on the first invocation of NERDTreeToggle command
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" Interface {
 
-""" Vim airline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+    " Vim airline {
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    " }
 
-""" Colorschemes
-Plug 'altercation/vim-colors-solarized'
+    " Colorschemes
+    Plug 'altercation/vim-colors-solarized'
 
-"" }
+    " Indent level display
+    Plug 'nathanaelkane/vim-indent-guides'
 
-"" Completion {
-""" Asynchronous completion for neovim
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+    " Syntax {
+        " Pandoc {
+        Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc' , 'markdown' ] }
+        Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
+        " }
+    " }
 
-"" }
+    " Tagbar
+    if executable('ctags')
+        Plug 'majutsushi/tagbar'
+    endif
 
-"" Syntax {
-""" Pandoc {
-Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc' , 'markdown' ] }
-Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
-""" }
+" }
 
-"" }
+" Utilities {
+    " Versionning {
+        " Git {
+        " Integration
+        Plug 'tpope/vim-fugitive'
 
-"" Utilities {
-""" Versionning {
-""" Git
-Plug 'tpope/vim-fugitive'
-Plug 'shumphrey/fugitive-gitlab.vim'
-Plug 'int3/vim-extradite'
-""" }
-"" }
+        " Commit browser
+        Plug 'int3/vim-extradite'
+
+        " Gitlab remotes handling
+        Plug 'shumphrey/fugitive-gitlab.vim'
+
+        " Diff in a gutter
+        Plug 'airblade/vim-gitgutter'
+        " }
+    " }
+
+    " Completion {
+        " Asynchronous completion for neovim {
+        Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+        " }
+
+        " Misc completions {
+        " Automatic pairing for '"()[]{}
+        Plug 'jiangmiao/auto-pairs'
+        " }
+    " }
+
+    " Syntax checking {
+    Plug 'neomake/neomake'
+    " }
+
+    " Tim Pope goodness {
+    " Handle surrounging chars ('"()[]{}) in an easier fashion
+    Plug 'tpope/vim-surround'
+
+    " Handy bracket mappings
+    Plug 'tpope/vim-unimpaired'
+
+    " Mappings for *ML and templating languages (php, django, jsp...)
+    Plug 'tpope/vim-ragtag', { 'for': [ 'xml', 'html', 'djangohtml' ] }
+    " }
+
+    " Misc {
+    " Undo tree browser
+    Plug 'mbbill/undotree'
+
+    " Text alignment utility
+    Plug 'godlygeek/tabular'
+
+    " Unite ALL THE THINGS
+    Plug 'Shougo/unite.vim'
+
+    " Multiple cursors
+    Plug 'kristijanhusak/vim-multiple-cursors'
+    " }
+" }
+
 call plug#end()
 " }
 
 " Plugins configuration {
+" Interface {
+    " vim-airline {
+    let g:airline_theme='dark'
+    let g:airline_powerline_fonts = 1
+    let g:airline#extensions#tabline#enabled = 1
+    " }
 
-"" Completion {
-""" Deoplete {
-let g:deoplete#enable_at_startup = 1
-" Reset omnifuncs
-if !exists('g:deoplete#omni#input_patterns')
-    let g:deoplete#omni#input_patterns = {}
-endif
+    " Solarized config {
+    let g:solarized_termcolors=256
+    let g:solarized_termtrans=1
+    let g:solarized_contrast="normal"
+    let g:solarized_visibility="normal"
+    colorscheme solarized
+    " }
 
-" Tab completion
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+    " Indent guide {
+    let g:indent_guides_guide_size = 1
+    let g:indent_guides_enable_on_vim_startup = 1
+    " }
+" }
 
-" Default omnifuncs
-""" }
-"" }
+" Utilities {
+    " Completion {
+        " Deoplete {
+        let g:deoplete#enable_at_startup = 1
+
+        " Tab completion (Needs completion to handle actual tab input)
+        inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+
+        " }
+    " }
+
+    " Syntax checking {
+        " Neomake {
+        au! BufWritePost * Neomake
+        " }
+    " }
+    " Misc {
+        " Undo tree tab {
+        if has('persistent_undo')
+            set undodir=~/.config/nvim/.undo/
+            set undofile
+        endif
+        let g:undotree_WindowLayout = 4
+        let g:undotree_SetFocusWhenToggle = 1
+        nnoremap <leader>u :UndotreeToggle<CR>
+        " }
+        " Unite {
+        " }
+    " }
+" }
+
 " }
