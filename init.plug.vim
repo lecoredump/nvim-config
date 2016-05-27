@@ -98,6 +98,12 @@ call plug#begin()
 
     " Multiple cursors
     Plug 'kristijanhusak/vim-multiple-cursors'
+
+    " Substitution overview
+    Plug 'osyo-manga/vim-over'
+
+    " Pretty icons (needs patched font), must be loaded last
+    Plug 'ryanoasis/vim-devicons'
     " }
 " }
 
@@ -139,6 +145,18 @@ call plug#end()
 
     " Syntax checking {
         " Neomake {
+        " Open quickfix after check if necessary
+        let g:neomake_open_list = 2
+        " Run each maker one after another
+        let g:neomake_serialize = 1
+        let g:neomake_warning_sign= {
+            \ 'text': '',
+            \ 'texthl': 'WarningMsg',
+            \ }
+        let g:neomake_error_sign = {
+            \ 'text': '',
+            \ 'texthl': 'WarningMsg',
+            \ }
         au! BufWritePost * Neomake
         " }
     " }
@@ -153,6 +171,7 @@ call plug#end()
         nnoremap <leader>u :UndotreeToggle<CR>
         " }
         " Unite {
+        nnoremap <C-l> :Unite file file_rec<CR>
         " }
     " }
 " }

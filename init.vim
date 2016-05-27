@@ -13,6 +13,7 @@ endif
 "" Environment {
 let g:python_host_prog = '/usr/bin/python2'
 let g:python3_host_prog = '/usr/bin/python3'
+set encoding=utf8
 "" }
 
 "" 'Plugins' config if available {
@@ -52,15 +53,11 @@ if has('statusline')
     set statusline+=\ [%{getcwd()}]
     " File navigation
     set statusline+=%=%-14.(%l,%c%V%)\ %p%%
-    set showmode
 endif
 """ }
 
-""" Relative / static number autoswitch {
-set relativenumber
-:au InsertEnter * :set number
-:au InsertLeave * :set relativenumber
-""" }
+" Relative line numbers, except for current
+set relativenumber number
 
 """ Tabs, indents, folds and line display {
 set smarttab
@@ -105,6 +102,7 @@ cmap w!! w !sudo tee % >/dev/null
 "" Misc Autocommands {
 """ Automatically switch CWD to current files'
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+
 "" }
 
 " }

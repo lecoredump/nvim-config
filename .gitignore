@@ -40,7 +40,6 @@ Thumbs.db
 
 # Miscallenous files #
 ######################
-
 *.*.sw*
 *.orig
 *.rej
@@ -54,7 +53,6 @@ tmp/
 #############################
 *.pyc
 *.pyo
-docker*/
 __pycache__/
 .ropeproject/
 
@@ -66,4 +64,5 @@ __pycache__/
 #################
 
 plugged/
-.undo
+.undo/
+.netrwhist
