@@ -123,7 +123,10 @@ call plug#end()
     let g:solarized_termtrans=1
     let g:solarized_contrast="normal"
     let g:solarized_visibility="normal"
-    colorscheme solarized
+    " Handle installation case to prevent error display
+    if filereadable(expand("~/.config/nvim/plugged/vim-colors-solarized/colors/solarized.vim"))
+        colorscheme solarized
+    endif
     " }
 
     " Indent guide {
