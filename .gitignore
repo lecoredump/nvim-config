@@ -63,6 +63,8 @@ __pycache__/
 # Repo specific #
 #################
 
+autoload/
 plugged/
 .undo/
 .netrwhist
+*creds*
