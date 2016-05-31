@@ -5,7 +5,7 @@
 scriptencoding utf-8
 " }}}
 
-" Utilities {{{
+" Plugin utilities {{{
     " Installs and sets vim-plug up if not done yet
     if !filereadable(expand('~/.config/nvim/autoload/plug.vim'))
         execute '!mkdir -p ~/.config/nvim/autoload/'
@@ -169,11 +169,16 @@ call plug#begin()
         " Substitution preview
         Plug 'osyo-manga/vim-over'
 
+        " Gather TODOs, BUGs and so on in a single window
+        " Plug 'vim-scripts/GrepTasks'
+        " TODO check above plugin to reproduce
+
         " ICONS EVERYWHERE, must be loaded last for interaction with other
         " plugins. Patched fonts : https://github.com/ryanoasis/nerd-fonts
-        " TODO: check valid font before loading
+        " TODO check valid font before loading
         Plug 'ryanoasis/vim-devicons'
     " }}}
+" }}}
 
 call plug#end()
 " }}}
