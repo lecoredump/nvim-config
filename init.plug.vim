@@ -116,12 +116,20 @@ call plug#begin()
         " Sort imports using isort utility
         " Requires isort installed : https://github.com/timothycrosley/isort
         if executable('isort')
-            Plug 'fisadev/vim-isort', { 'for': [ 'python' ] }
+            Plug 'fisadev/vim-isort', { 'for': [ 'python', 'djangohtml' ] }
         endif
 
         " Python source for deoplete
-        Plug 'zchee/deoplete-jedi', { 'for': [ 'python' ] }
+        Plug 'zchee/deoplete-jedi', { 'for': [ 'python', 'djangohtml' ] }
+
+        " Virtual environment handling
+        Plug 'jmcantrell/vim-virtualenv', { 'for': [ 'python', 'djangohtml' ] }
         " }}}
+
+        " CSV {{{
+        Plug 'chrisbra/csv.vim', { 'for': [ 'csv' ] }
+        " }}}
+
     " }}}
 
     " Syntax checking {{{
@@ -168,6 +176,9 @@ call plug#begin()
 
         " Substitution preview
         Plug 'osyo-manga/vim-over'
+
+        " Narrow region similar to Emacs
+        Plug 'chrisbra/NrrwRgn'
 
         " Gather TODOs, BUGs and so on in a single window
         " Plug 'vim-scripts/GrepTasks'
@@ -218,7 +229,10 @@ endfunction
     " vim-airline {{{
     let g:airline_theme='dark'
     let g:airline_powerline_fonts = 1
+    " Display buffer list in tabline on single tab
     let g:airline#extensions#tabline#enabled = 1
+    " Enable NrrwRgn integration
+    let g:airline#extensions#nrrwrgn#enabled = 1
     " }}}
 
     " Solarized config {{{
