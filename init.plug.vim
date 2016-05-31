@@ -35,7 +35,10 @@ call plug#begin()
 
     " Indent level display
     Plug 'nathanaelkane/vim-indent-guides'
-    "
+
+    " Semantic highlights, each variable its own
+    " TODO: adapt colors to solarized colorscheme
+    Plug 'jaxbot/semantic-highlight.vim'
 " }
 
 " Utilities {
@@ -68,36 +71,11 @@ call plug#begin()
         endif
     " }
 
-    " Languages {
-
-        " Pandoc / Markdown {
-        Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc' , 'markdown' ] }
-        Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
-        " }
-
-        " HTML / CSS {
-        " Highlights HSLA, RGB (HEX and others) and color names
-        Plug 'gorodinskiy/vim-coloresque'
-
-        " Emoji completion, because we can
-        Plug 'junegunn/vim-emoji', { 'for': [ 'html', 'djangohtml', 'markdown' ] }
-        " }
-
-        " Python {
-        " Sort imports using isort utility
-        " Requires isort installed : https://github.com/timothycrosley/isort
-        if executable('isort')
-            Plug 'fisadev/vim-isort', { 'for': [ 'python' ] }
-        endif
-        " }
-    " }
-
     " Tags handling {
     if executable('ctags')
         Plug 'majutsushi/tagbar'
     endif
     " }
-
 
     " Completion {
         " Asynchronous completion for neovim {
@@ -107,6 +85,42 @@ call plug#begin()
         " Misc completions {
         " Automatic pairing for '"()[]{}
         Plug 'jiangmiao/auto-pairs'
+        " }
+    " }
+
+    " Languages / Filetypes {
+
+        " Pandoc / Markdown / Latex / Txt {
+        Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc' , 'markdown' ] }
+        Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
+
+        " Accentuated characters for those not in your keymap
+        " TODO: integrate as in http://junegunn.kr/2014/06/emoji-completion-in-vim/
+        Plug 'airblade/vim-accent', { 'for': [ 'pandoc', 'markdown', 'latex', 'text' ] }
+        " }
+
+        " HTML / CSS {
+        " Highlights HSLA, RGB (HEX and others) and color names
+        Plug 'gorodinskiy/vim-coloresque', { 'for': [ 'html', 'djangohtml', 'markdown' ] }
+
+        " Emoji completion, because we can
+        Plug 'junegunn/vim-emoji', { 'for': [ 'html', 'djangohtml', 'markdown' ] }
+
+        if executable('zenity') || executable('yad')
+            " Color picker, requires either yad or zenity
+            Plug 'KabbAmine/vCoolor.vim', { 'for': [ 'html', 'djangohtml', 'markdown' ] }
+        endif
+        " }
+
+        " Python {
+        " Sort imports using isort utility
+        " Requires isort installed : https://github.com/timothycrosley/isort
+        if executable('isort')
+            Plug 'fisadev/vim-isort', { 'for': [ 'python' ] }
+        endif
+
+        " Python source for deoplete
+        Plug 'zchee/deoplete-jedi', { 'for': [ 'python' ] }
         " }
     " }
 
@@ -121,8 +135,17 @@ call plug#begin()
         " Handy bracket mappings
         Plug 'tpope/vim-unimpaired'
 
+        " Commentary handling
+        Plug 'tpope/vim-commentary'
+
         " Mappings for *ML and templating languages (php, django, jsp...)
         Plug 'tpope/vim-ragtag', { 'for': [ 'xml', 'html', 'djangohtml' ] }
+
+        " Handle case swotching, advanced substitutions and abbreviations
+        Plug 'tpope/vim-abolish'
+
+        " Repeat ALL THE THINGS (including some Tpope goodness of course)
+        Plug 'tpope/vim-repeat'
     " }
 
     " Motions {
@@ -148,6 +171,7 @@ call plug#begin()
 
         " ICONS EVERYWHERE, must be loaded last for interaction with other
         " plugins. Patched fonts : https://github.com/ryanoasis/nerd-fonts
+        " TODO: check valid font before loading
         Plug 'ryanoasis/vim-devicons'
     " }
 " }
@@ -213,13 +237,37 @@ endfunction
 " }
 
 " Utilities {
+    " Versionning {
+        " Git {
+        let g:gitgutter_eager = 1
+        let g:gitgutter_realtime = 1
+        " }
+        " }
     " Completion {
         " Deoplete {
         let g:deoplete#enable_at_startup = 1
 
-        " Tab completion (Needs completion to handle actual tab input)
+        " Tab completion
+        " TODO: Needs to handle actual tab input
         inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 
+        " }
+    " }
+
+    " Languages / Filetypes {
+        " HTML / CSS {
+        " Color picker config
+        " TODO : change colors to fit solarized theme
+        if executable('yad')
+            let g:vcoolor_custom_picker = 'yad --color --alpha --extra --gtk-palette --expand-palette'
+        elseif executable('zenity')
+            let g:vcoolor_custom_picker = 'zenity --show-palette'
+        endif
+        " }
+
+        " Python {
+        let g:deoplete#sources#jedi#statement_length = 250
+        let g:deoplete#sources#jedi#show_docstring = 1
         " }
     " }
 
@@ -237,11 +285,13 @@ endfunction
             \ 'text': '',
             \ 'texthl': 'WarningMsg',
             \ }
+
         augroup neomake
-            autocmd! BufWritePost * Neomake
+            autocmd! BufWritePost *.* Neomake
         augroup END
         " }
     " }
+
     " Misc {
         " Undo tree tab {
         if has('persistent_undo')
