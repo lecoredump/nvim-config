@@ -8,8 +8,8 @@ scriptencoding utf-8
 " Utilities {
     " Installs and sets vim-plug up if not done yet
     if !filereadable(expand('~/.config/nvim/autoload/plug.vim'))
-        execute 'mkdir -p ~/.config/nvim/autoload/'
-        execute 'mkdir -p ~/.config/nvim/plugged'
+        execute '!mkdir -p ~/.config/nvim/autoload/'
+        execute '!mkdir -p ~/.config/nvim/plugged'
         execute '!curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
     endif
 
