@@ -17,9 +17,12 @@ endif
     scriptencoding utf-8
     " }}}
 
-    " 'Plugins' config if available {{{
+    " 'Plugins' and their configuration if available {{{
     if filereadable(expand('~/.config/nvim/init.plug.vim'))
         source ~/.config/nvim/init.plug.vim
+        if filereadable(expand('~/.config/nvim/init.plugconf.vim'))
+            source ~/.config/nvim/init.plugconf.vim
+        endif
     endif
     " }}}
 
@@ -68,6 +71,7 @@ endif
         set autoindent
 
         set whichwrap=b,s,h,l,<,>,[,]
+        set nowrap
         set scrolljump=5
         set scrolloff=3
         set showmatch

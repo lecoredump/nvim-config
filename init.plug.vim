@@ -1,5 +1,5 @@
 " Modeline and description {{{
-" Default plugin set and associated configuration.
+" Plugin install / loading.
 " Uses https://github.com/junegunn/vim-plug for plugin management.
 " vim: set sw=4 ts=4 sts=4 tw=78 ft=vim foldmarker={{{,}}} foldmethod=marker :
 scriptencoding utf-8
@@ -7,7 +7,7 @@ scriptencoding utf-8
 
 " Plugin utilities {{{
     " Installs and sets vim-plug up if not done yet
-    if !filereadable(expand('~/.config/nvim/autoload/plug.vim'))
+    if !filereadable(expand('~/.config/nvim/autoload/plug.vim')) && executable('curl')
         execute '!mkdir -p ~/.config/nvim/autoload/'
         execute '!mkdir -p ~/.config/nvim/plugged'
         execute '!curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
@@ -23,7 +23,7 @@ scriptencoding utf-8
 " Plugin loading {{{
 call plug#begin()
 
-" Interface {{{
+" UI {{{
 
     " Vim airline {{{
     Plug 'vim-airline/vim-airline'
@@ -37,291 +37,191 @@ call plug#begin()
     Plug 'nathanaelkane/vim-indent-guides'
 
     " Semantic highlights, each variable its own
-    " TODO: adapt colors to solarized colorscheme
-    Plug 'jaxbot/semantic-highlight.vim'
+    " TODO adapt colors to solarized colorscheme
+    Plug 'jaxbot/semantic-highlight.vim', { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
+
+    " Colored parenthesis pair by pair
+    Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
 " }}}
 
-" Utilities {{{
-    " Versionning / Code management {{{
-        " Git {{{
-        " Integration
-        Plug 'tpope/vim-fugitive'
+" Versionning / Code management {{{
+    " Git {{{
+    " Integration
+    Plug 'tpope/vim-fugitive'
 
-        if (filereadable(expand('~/.config/nvim/init.creds.vim')))
-            " Github integration for fugitive
-            " Requires access token in a configuration file
-            " Requires curl installed on the machine
-            Plug 'jaxbot/github-issues.vim'
-        endif
+    " Commit browser (requires fugitive)
+    Plug 'junegunn/gv.vim'
 
-        " Commit browser
-        Plug 'int3/vim-extradite'
+    " Diff with current HEAD in a gutter
+    Plug 'airblade/vim-gitgutter'
 
-        " Gitlab remotes handling
-        Plug 'shumphrey/fugitive-gitlab.vim'
+    " Gitlab remotes handling
+    Plug 'shumphrey/fugitive-gitlab.vim'
 
-        " Diff with current HEAD in a gutter
-        Plug 'airblade/vim-gitgutter'
-        " }}}
+    if (filereadable(expand('~/.config/nvim/init.creds.vim')))
+        " Github integration for fugitive
+        " Requires access token in a configuration file
+        " Requires curl installed on the machine
+        Plug 'jaxbot/github-issues.vim'
+    endif
 
-        if executable('patch')
-            " Single/multi-patch or diff reviews
-            " Requires patch command installed
-            Plug 'junkblocker/patchreview-vim'
-        endif
     " }}}
 
-    " Tags handling {{{
+    if executable('patch')
+        " Single/multi-patch or diff reviews
+        " Requires patch command installed
+        Plug 'junkblocker/patchreview-vim'
+    endif
+" }}}
+
+" Tags {{{
     if executable('ctags')
+        " Coming too close to an IDE maybe ?
         Plug 'majutsushi/tagbar'
     endif
+" }}}
+
+" Completion {{{
+    " Asynchronous completion for neovim {{{
+    Plug 'Shougo/deoplete.nvim',          { 'do': function('DoRemote') }
     " }}}
 
-    " Completion {{{
-        " Asynchronous completion for neovim {{{
-        Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
-        " }}}
-
-        " Misc completions {{{
-        " Automatic pairing for '"()[]{}
-        Plug 'jiangmiao/auto-pairs'
-        " }}}
+    " Misc completions {{{
+    " Automatic pairing for '"()[]{}
+    Plug 'jiangmiao/auto-pairs'
     " }}}
+" }}}
 
-    " Languages / Filetypes {{{
+" Languages / Filetypes {{{
 
-        " Pandoc / Markdown / Latex / Txt {{{
-        Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc' , 'markdown' ] }
-        Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
+    " Pandoc / Markdown / Latex / Txt / Writing {{{
+        Plug 'vim-pandoc/vim-pandoc',         { 'for': [ 'pandoc', 'markdown' ] }
+        Plug 'vim-pandoc/vim-pandoc-syntax',  { 'for': [ 'pandoc', 'markdown' ] }
 
         " Accentuated characters for those not in your keymap
-        " TODO: integrate as in http://junegunn.kr/2014/06/emoji-completion-in-vim/
-        Plug 'airblade/vim-accent', { 'for': [ 'pandoc', 'markdown', 'latex', 'text' ] }
-        " }}}
+        " TODO integrate as in http://junegunn.kr/2014/06/emoji-completion-in-vim/
+        Plug 'airblade/vim-accent',           { 'for': [ 'pandoc', 'markdown', 'latex', 'text' ] }
 
-        " HTML / CSS {{{
+        " Distraction-free writing
+        Plug 'junegunn/goyo.vim',             { 'on': [ 'GoyoEnter' ] }
+        Plug 'junegunn/limelight.vim',        { 'on': [ 'Limelight' ] }
+
+    " }}}
+
+    " HTML / CSS {{{
         " Highlights HSLA, RGB (HEX and others) and color names
-        Plug 'gorodinskiy/vim-coloresque', { 'for': [ 'html', 'djangohtml', 'markdown' ] }
+        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc' ] }
 
         " Emoji completion, because we can
-        Plug 'junegunn/vim-emoji', { 'for': [ 'html', 'djangohtml', 'markdown' ] }
+        Plug 'junegunn/vim-emoji',            { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc'] }
 
         if executable('zenity') || executable('yad')
             " Color picker, requires either yad or zenity
-            Plug 'KabbAmine/vCoolor.vim', { 'for': [ 'html', 'djangohtml', 'markdown' ] }
+            Plug 'KabbAmine/vCoolor.vim',     { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc' ] }
         endif
-        " }}}
 
-        " Python {{{
+        " Convert between utf8 and HTML entities
+        Plug 'idbrii/vim-textconv',           { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc' ] }
+
+        " Emmet emulation in vim (tag generation)
+        Plug 'mattn/emmet-vim',               { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc' ] }
+    " }}}
+
+    " Python {{{
         " Sort imports using isort utility
         " Requires isort installed : https://github.com/timothycrosley/isort
         if executable('isort')
-            Plug 'fisadev/vim-isort', { 'for': [ 'python', 'djangohtml' ] }
+            Plug 'fisadev/vim-isort',         { 'for': [ 'python', 'htmldjango' ] }
         endif
 
         " Python source for deoplete
-        Plug 'zchee/deoplete-jedi', { 'for': [ 'python', 'djangohtml' ] }
+        Plug 'zchee/deoplete-jedi',           { 'for': [ 'python', 'htmldjango' ] }
 
         " Virtual environment handling
-        Plug 'jmcantrell/vim-virtualenv', { 'for': [ 'python', 'djangohtml' ] }
-        " }}}
-
-        " CSV {{{
-        Plug 'chrisbra/csv.vim', { 'for': [ 'csv' ] }
-        " }}}
-
+        Plug 'jmcantrell/vim-virtualenv',     { 'for': [ 'python', 'htmldjango' ] }
     " }}}
 
-    " Syntax checking {{{
-        Plug 'neomake/neomake'
+    " CSV {{{
+        Plug 'chrisbra/csv.vim',              { 'for': [ 'csv' ] }
     " }}}
+" }}}
 
-    " Tim Pope goodness {{{
-        " Handle surrounging chars ('"()[]{}) in an easier fashion
-        Plug 'tpope/vim-surround'
+" Syntax checking {{{
+    Plug 'neomake/neomake'
+" }}}
 
-        " Handy bracket mappings
-        Plug 'tpope/vim-unimpaired'
+" Tim Pope goodness {{{
+    " Handle surrounging chars ('"()[]{}) in an easier fashion
+    Plug 'tpope/vim-surround'
 
-        " Commentary handling
-        Plug 'tpope/vim-commentary'
+    " Handy bracket mappings
+    Plug 'tpope/vim-unimpaired'
 
-        " Mappings for *ML and templating languages (php, django, jsp...)
-        Plug 'tpope/vim-ragtag', { 'for': [ 'xml', 'html', 'djangohtml' ] }
+    " Commentary handling
+    Plug 'tpope/vim-commentary'
 
-        " Handle case swotching, advanced substitutions and abbreviations
-        Plug 'tpope/vim-abolish'
+    " Mappings for *ML and templating languages (php, django, jsp...)
+    Plug 'tpope/vim-ragtag',              { 'for': [ 'xml', 'html', 'htmldjango' ] }
 
-        " Repeat ALL THE THINGS (including some Tpope goodness of course)
-        Plug 'tpope/vim-repeat'
-    " }}}
+    " Handle case swotching, advanced substitutions and abbreviations
+    Plug 'tpope/vim-abolish'
 
-    " Motions {{{
-        " Multiple cursors
-        Plug 'kristijanhusak/vim-multiple-cursors'
+    " Repeat ALL THE THINGS (including some Tpope goodness of course)
+    Plug 'tpope/vim-repeat'
+" }}}
 
-        " Adds new textobjects : pair, quote, separator, argument
-        Plug 'wellle/targets.vim'
-    " }}}
+" Motions {{{
+    " Multiple cursors
+    Plug 'kristijanhusak/vim-multiple-cursors'
 
-    " Other {{{
-        " Undo tree browser
-        Plug 'mbbill/undotree'
+    " Adds new textobjects : pair, quote, separator, argument
+    Plug 'wellle/targets.vim'
 
-        " Text alignment utility
-        Plug 'godlygeek/tabular'
+    " Adds target 'after' as a textobject
+    Plug 'junegunn/vim-after-object'
+" }}}
 
-        " Unite ALL THE THINGS
-        Plug 'Shougo/unite.vim'
+" Search {{{
+    " Unite ALL THE THINGS (fuzzy search through multiple 'sources')
+    Plug 'Shougo/unite.vim'
 
-        " Substitution preview
-        Plug 'osyo-manga/vim-over'
+    " Augmented / searches (requires vim-pseudocl)
+    Plug 'junegunn/vim-pseudocl' | Plug 'junegunn/vim-oblique'
+" }}}
 
-        " Narrow region similar to Emacs
-        Plug 'chrisbra/NrrwRgn'
+" Other {{{
+    " Undo tree browser
+    Plug 'mbbill/undotree'
 
-        " Gather TODOs, BUGs and so on in a single window
-        " Plug 'vim-scripts/GrepTasks'
-        " TODO check above plugin to reproduce
+    " Text alignment utility
+    Plug 'junegunn/vim-easy-align'
 
-        " ICONS EVERYWHERE, must be loaded last for interaction with other
-        " plugins. Patched fonts : https://github.com/ryanoasis/nerd-fonts
-        " TODO check valid font before loading
-        Plug 'ryanoasis/vim-devicons'
-    " }}}
+    " Substitution preview
+    Plug 'osyo-manga/vim-over'
+
+    " Narrow region similar to Emacs
+    Plug 'chrisbra/NrrwRgn'
+
+    if executable('curl') || executable('wget')
+        " Requires curl or wget
+        " Web API interaction
+        Plug 'mattn/webapi-vim'
+    endif
+
+    if executable('task')
+        " Taskwarrior interface
+        Plug 'blindFS/vim-taskwarrior',       { 'on': 'TW' }
+    endif
+
+    " Gather TODOs, BUGs and so on in a single window
+    " Plug 'vim-scripts/GrepTasks'
+    " TODO check above plugin to reproduce
+
+    " ICONS EVERYWHERE, must be loaded last for interaction with other
+    " plugins. Patched fonts : https://github.com/ryanoasis/nerd-fonts
+    " TODO check valid font before loading
+    Plug 'ryanoasis/vim-devicons'
 " }}}
 
 call plug#end()
-" }}}
-
-" Configuration functions {{{
-
-" Handle multiple completion types
-" TODO: handle list based on filetype
-function! CompletionChain(findstart, base)
-  if a:findstart
-    " Test against the functions one by one
-    for l:func in g:user_completion_chain
-      let l:pos = call(l:func, [a:findstart, a:base])
-      " If a function can complete the prefix,
-      " remember the name and return the result from the function
-      if l:pos >= 0
-        let s:current_completion = l:func
-        return l:pos
-      endif
-    endfor
-
-    " No completion can be done
-    unlet! s:current_completion
-    return -1
-  elseif exists('s:current_completion')
-    " Simply pass the arguments to the selected function
-    return call(s:current_completion, [a:findstart, a:base])
-  else
-    return []
-  endif
-endfunction
-
-" }}}
-
-" Plugins configuration {{{
-" Interface {{{
-    " vim-airline {{{
-    let g:airline_theme='dark'
-    let g:airline_powerline_fonts = 1
-    " Display buffer list in tabline on single tab
-    let g:airline#extensions#tabline#enabled = 1
-    " Enable NrrwRgn integration
-    let g:airline#extensions#nrrwrgn#enabled = 1
-    " }}}
-
-    " Solarized config {{{
-    let g:solarized_termcolors=256
-    let g:solarized_termtrans=1
-    let g:solarized_contrast='normal'
-    let g:solarized_visibility='normal'
-    " Handle installation case to prevent error display
-    if filereadable(expand('~/.config/nvim/plugged/vim-colors-solarized/colors/solarized.vim'))
-        colorscheme solarized
-    endif
-    " }}}
-
-    " Indent guide {{{
-    let g:indent_guides_guide_size = 1
-    let g:indent_guides_enable_on_vim_startup = 1
-    " }}}
-" }}}
-
-" Utilities {{{
-    " Versionning {{{
-        " Git {{{
-        let g:gitgutter_eager = 1
-        let g:gitgutter_realtime = 1
-        " }}}
-        " }}}
-    " Completion {{{
-        " Deoplete {{{
-        let g:deoplete#enable_at_startup = 1
-
-        " Tab completion
-        " TODO: Needs to handle actual tab input
-        inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
-
-        " }}}
-    " }}}
-
-    " Languages / Filetypes {{{
-        " HTML / CSS {{{
-        " Color picker config
-        " TODO : change colors to fit solarized theme
-        if executable('yad')
-            let g:vcoolor_custom_picker = 'yad --color --alpha --extra --gtk-palette --expand-palette'
-        elseif executable('zenity')
-            let g:vcoolor_custom_picker = 'zenity --show-palette'
-        endif
-        " }}}
-
-        " Python {{{
-        let g:deoplete#sources#jedi#statement_length = 250
-        let g:deoplete#sources#jedi#show_docstring = 1
-        " }}}
-    " }}}
-
-    " Syntax checking {{{
-        " Neomake {{{
-        " Open quickfix after check if necessary
-        let g:neomake_open_list = 2
-        " Run each maker one after another
-        let g:neomake_serialize = 1
-        let g:neomake_warning_sign= {
-            \ 'text': '',
-            \ 'texthl': 'WarningMsg',
-            \ }
-        let g:neomake_error_sign = {
-            \ 'text': '',
-            \ 'texthl': 'WarningMsg',
-            \ }
-
-        augroup neomake
-            autocmd! BufWritePost *.* Neomake
-        augroup END
-        " }}}
-    " }}}
-
-    " Misc {{{
-        " Undo tree tab {{{
-        if has('persistent_undo')
-            set undodir=~/.config/nvim/.undo/
-            set undofile
-        endif
-        let g:undotree_WindowLayout = 4
-        let g:undotree_SetFocusWhenToggle = 1
-        nnoremap <leader>u :UndotreeToggle<CR>
-        " }}}
-        " Unite {{{
-        nnoremap <C-l> :Unite file file_rec<CR>
-        " }}}
-    " }}}
-" }}}
-
 " }}}
