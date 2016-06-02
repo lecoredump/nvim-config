@@ -36,6 +36,12 @@ call plug#begin()
     " Indent level display
     Plug 'nathanaelkane/vim-indent-guides'
 
+    " Folding enhanced
+    Plug 'Konfekt/FastFold'
+
+    " Display information regarding registers
+    Plug 'junegunn/vim-peekaboo'
+
     " Semantic highlights, each variable its own
     " TODO adapt colors to solarized colorscheme
     Plug 'jaxbot/semantic-highlight.vim', { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
@@ -83,8 +89,33 @@ call plug#begin()
 
 " Completion {{{
     " Asynchronous completion for neovim {{{
-    Plug 'Shougo/deoplete.nvim',          { 'do': function('DoRemote') }
+    Plug 'Shougo/deoplete.nvim',            { 'do': function('DoRemote') }
+
+    " Python source for deoplete
+    Plug 'zchee/deoplete-jedi',             { 'for': [ 'python', 'htmldjango' ] }
+
+    " Vim source for deoplete
+    Plug 'Shougo/neco-vim',                 { 'for': [ 'vim' ] }
+
+    " Perl source for neovim
+    Plug 'c9s/perlomni.vim',                { 'for': [ 'perl' ] }
+
+    " C / C++ sources for deoplete
+    Plug 'zchee/deoplete-clang',            { 'for': [ 'c', 'cpp', 'objc', 'objcpp' ] }
+
+    " Filetype context extension for deoplete's sources
+    Plug 'Shougo/context_filetype.vim'
+
+    " Include sources for deoplete
+    Plug 'Shougo/neoinclude.vim'
+
+    "  Doc sources for deoplete
+    Plug 'Shougo/echodoc.vim'
+
     " }}}
+
+    " Completion with tab
+    Plug 'ervandew/supertab'
 
     " Misc completions {{{
     " Automatic pairing for '"()[]{}
@@ -134,9 +165,6 @@ call plug#begin()
             Plug 'fisadev/vim-isort',         { 'for': [ 'python', 'htmldjango' ] }
         endif
 
-        " Python source for deoplete
-        Plug 'zchee/deoplete-jedi',           { 'for': [ 'python', 'htmldjango' ] }
-
         " Virtual environment handling
         Plug 'jmcantrell/vim-virtualenv',     { 'for': [ 'python', 'htmldjango' ] }
     " }}}
@@ -185,7 +213,7 @@ call plug#begin()
     " Unite ALL THE THINGS (fuzzy search through multiple 'sources')
     Plug 'Shougo/unite.vim'
 
-    " Augmented / searches (requires vim-pseudocl)
+    " Augmented '/' (requires vim-pseudocl)
     Plug 'junegunn/vim-pseudocl' | Plug 'junegunn/vim-oblique'
 " }}}
 
@@ -224,4 +252,3 @@ call plug#begin()
 " }}}
 
 call plug#end()
-" }}}

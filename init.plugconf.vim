@@ -5,36 +5,6 @@
 scriptencoding utf-8
 " }}}
 
-" Configuration functions {{{
-
-" Handle multiple completion types
-" TODO: handle list based on filetype
-function! CompletionChain(findstart, base)
-  if a:findstart
-    " Test against the functions one by one
-    for l:func in g:user_completion_chain
-      let l:pos = call(l:func, [a:findstart, a:base])
-      " If a function can complete the prefix,
-      " remember the name and return the result from the function
-      if l:pos >= 0
-        let s:current_completion = l:func
-        return l:pos
-      endif
-    endfor
-
-    " No completion can be done
-    unlet! s:current_completion
-    return -1
-  elseif exists('s:current_completion')
-    " Simply pass the arguments to the selected function
-    return call(s:current_completion, [a:findstart, a:base])
-  else
-    return []
-  endif
-endfunction
-
-" }}}
-
 " Plugins configuration {{{
 " UI {{{
     " vim-airline {{{
@@ -47,13 +17,13 @@ endfunction
     " }}}
 
     " Solarized config {{{
-    let g:solarized_termcolors=256
-    let g:solarized_termtrans=1
-    let g:solarized_contrast='normal'
-    let g:solarized_visibility='normal'
     " Handle installation case to prevent error display
     if filereadable(expand('~/.config/nvim/plugged/vim-colors-solarized/colors/solarized.vim'))
         colorscheme solarized
+        let g:solarized_termcolors=256
+        let g:solarized_termtrans=1
+        let g:solarized_contrast='normal'
+        let g:solarized_visibility='normal'
     endif
     " }}}
 
@@ -63,26 +33,49 @@ endfunction
     " }}}
 " }}}
 
-" Utilities {{{
-    " Versionning {{{
-        " Git {{{
-        let g:gitgutter_eager = 1
-        let g:gitgutter_realtime = 1
-        " }}}
-        " }}}
-    " Completion {{{
-        " Deoplete {{{
+" Versionning {{{
+    " Git {{{
+    let g:gitgutter_eager = 1
+    let g:gitgutter_realtime = 1
+    " }}}
+" }}}
+
+" Completion {{{
+    " Deoplete {{{
         let g:deoplete#enable_at_startup = 1
 
-        " Tab completion
-        " TODO: Needs to handle actual tab input
-        inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+        " Python {{{
+        let g:deoplete#sources#jedi#statement_length = 250
+        let g:deoplete#sources#jedi#show_docstring = 1
+        " }}}
 
+        " C {{{
+        let g:deoplete#sources#clang#libclang_path = '/usr/lib/libclang.so'
+        let g:deoplete#sources#clang#clang_header = '/usr/lib/clang'
+        " }}}
+
+        " Doc display {{{
+        let g:echodoc_enable_at_startup = 1
         " }}}
     " }}}
 
-    " Languages / Filetypes {{{
-        " HTML / CSS {{{
+    " Supertab default completion
+    " let g:SuperTabDefaultCompletionType = 'context'
+    " let g:SuperTabContextDefaultCompletionType = '<c-n>'
+" }}}
+
+" Languages / Filetypes {{{
+    " Pandoc / Markdown / Latex / Txt / Writing {{{
+        " Limelight conceal color for solarized theme
+        let g:limelight_conceal_ctermfg = 'black'
+        " Goyo & Limelight interaction
+        augroup goyo_lime
+            autocmd! User GoyoEnter Limelight
+            autocmd! User GoyoLeave Limelight!
+        augroup END
+    " }}}
+
+    " HTML / CSS {{{
         " Color picker config
         " TODO : change colors to fit solarized theme
         if executable('yad')
@@ -90,50 +83,43 @@ endfunction
         elseif executable('zenity')
             let g:vcoolor_custom_picker = 'zenity --show-palette'
         endif
-        " }}}
-
-        " Python {{{
-        let g:deoplete#sources#jedi#statement_length = 250
-        let g:deoplete#sources#jedi#show_docstring = 1
-        " }}}
-    " }}}
-
-    " Syntax checking {{{
-        " Neomake {{{
-        " Open quickfix after check if necessary
-        let g:neomake_open_list = 2
-        " Run each maker one after another
-        let g:neomake_serialize = 1
-        let g:neomake_warning_sign= {
-            \ 'text': '',
-            \ 'texthl': 'WarningMsg',
-            \ }
-        let g:neomake_error_sign = {
-            \ 'text': '',
-            \ 'texthl': 'WarningMsg',
-            \ }
-
-        augroup neomake
-            autocmd! BufWritePost *.* Neomake
-        augroup END
-        " }}}
-    " }}}
-
-    " Misc {{{
-        " Undo tree tab {{{
-        if has('persistent_undo')
-            set undodir=~/.config/nvim/.undo/
-            set undofile
-        endif
-        let g:undotree_WindowLayout = 4
-        let g:undotree_SetFocusWhenToggle = 1
-        nnoremap <leader>u :UndotreeToggle<CR>
-        " }}}
-        " Unite {{{
-        nnoremap <C-l> :Unite file file_rec<CR>
-        " }}}
     " }}}
 " }}}
 
+" Syntax checking {{{
+    " Neomake {{{
+    " Open quickfix after check if necessary
+    let g:neomake_open_list = 2
+    " Run each maker one after another
+    let g:neomake_serialize = 1
+    let g:neomake_warning_sign= {
+        \ 'text': '',
+        \ 'texthl': 'WarningMsg',
+        \ }
+    let g:neomake_error_sign = {
+        \ 'text': '',
+        \ 'texthl': 'WarningMsg',
+        \ }
+
+    augroup neomake
+        autocmd! BufWritePost * Neomake
+    augroup END
+    " }}}
 " }}}
 
+" Misc {{{
+    " Undo tree tab {{{
+    if has('persistent_undo')
+        set undodir=~/.config/nvim/.undo/
+        set undofile
+    endif
+    let g:undotree_WindowLayout = 4
+    let g:undotree_SetFocusWhenToggle = 1
+    nnoremap <leader>u :UndotreeToggle<CR>
+    " }}}
+
+    " Unite {{{
+    nnoremap <C-l> :Unite file file_rec<CR>
+    " }}}
+" }}}
+" }}}

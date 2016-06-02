@@ -13,7 +13,9 @@ endif
     " Environment {{{
     let g:python_host_prog = '/usr/bin/python2'
     let g:python3_host_prog = '/usr/bin/python3'
-    set encoding=utf-8
+    if ! exists('encoding')
+        set encoding=utf-8
+    endif
     scriptencoding utf-8
     " }}}
 
@@ -39,6 +41,7 @@ endif
             set ruler
             set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
             set showcmd
+            set noshowmode
         endif
         " }}}
 
@@ -65,6 +68,7 @@ endif
         set smarttab
         set tabstop=4
         set shiftwidth=4
+        set shiftround
         set softtabstop=4
         set expandtab
         set textwidth=79
@@ -98,13 +102,18 @@ endif
     " }}}
 
     " Default mappings (all filetypes) {{{
+    " Leader
+    let g:mapleader = ','
     " Simpler return to normal mode
     inoremap jj <Esc>
     inoremap kk <Esc>
     vnoremap jk <Esc>
 
+    " Toggle current fold with space in normal mode
+    nnoremap <space> za
+
     " For when you forget to sudo.. Really write the file.
-    cmap w!! w !sudo tee % >/dev/null
+    cnoremap w!! w !sudo tee % >/dev/null
     " }}}
 
     " Functions {{{
