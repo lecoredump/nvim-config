@@ -33,7 +33,10 @@ scriptencoding utf-8
     " }}}
 " }}}
 
-" Versionning {{{
+" Versionning / Code Management {{{
+    " Nerdtree
+    noremap <C-e> :NERDTreeToggle<CR>
+
     " Git {{{
     let g:gitgutter_eager = 1
     let g:gitgutter_realtime = 1

@@ -44,19 +44,25 @@ call plug#begin()
 
     " Semantic highlights, each variable its own
     " TODO adapt colors to solarized colorscheme
-    Plug 'jaxbot/semantic-highlight.vim', { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
+    Plug 'jaxbot/semantic-highlight.vim',    { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
 
     " Colored parenthesis pair by pair
     Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
 " }}}
 
 " Versionning / Code management {{{
+    " File / Project browser
+    Plug 'scrooloose/nerdtree',              { 'on': [ 'NERDTree', 'NERDTreeToggle' ] }
+
     " Git {{{
     " Integration
     Plug 'tpope/vim-fugitive'
 
     " Commit browser (requires fugitive)
     Plug 'junegunn/gv.vim'
+
+    " Git integration to NERDTree
+    Plug 'Xuyuanp/nerdtree-git-plugin',      { 'on': [ 'NERDTree', 'NERDTreeToggle' ] }
 
     " Diff with current HEAD in a gutter
     Plug 'airblade/vim-gitgutter'
@@ -111,6 +117,9 @@ call plug#begin()
 
     "  Doc sources for deoplete
     Plug 'Shougo/echodoc.vim'
+
+    " Auto-complete pairs in deoplete
+    Plug 'Shougo/neopairs.vim'
 
     " }}}
 
@@ -189,7 +198,7 @@ call plug#begin()
     Plug 'tpope/vim-commentary'
 
     " Mappings for *ML and templating languages (php, django, jsp...)
-    Plug 'tpope/vim-ragtag',              { 'for': [ 'xml', 'html', 'htmldjango' ] }
+    Plug 'tpope/vim-ragtag',                  { 'for': [ 'xml', 'html', 'htmldjango' ] }
 
     " Handle case swotching, advanced substitutions and abbreviations
     Plug 'tpope/vim-abolish'
@@ -218,6 +227,7 @@ call plug#begin()
 " }}}
 
 " Other {{{
+
     " Undo tree browser
     Plug 'mbbill/undotree'
 
@@ -227,7 +237,7 @@ call plug#begin()
     " Substitution preview
     Plug 'osyo-manga/vim-over'
 
-    " Narrow region similar to Emacs
+    " Only display the "region" you're working on
     Plug 'chrisbra/NrrwRgn'
 
     if executable('curl') || executable('wget')
