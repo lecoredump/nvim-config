@@ -73,8 +73,7 @@ call plug#begin()
     if (filereadable(expand('~/.config/nvim/init.creds.vim')))
         " Github integration for fugitive
         " Requires access token in a configuration file
-        " Requires curl installed on the machine
-        Plug 'jaxbot/github-issues.vim'
+        Plug 'rhysd/github-complete.vim',    { 'for': [ 'gitcommit', 'markdown' ] }
     endif
 
     " }}}
@@ -180,6 +179,14 @@ call plug#begin()
 
     " CSV {{{
         Plug 'chrisbra/csv.vim',              { 'for': [ 'csv' ] }
+    " }}}
+
+    " Nmap syntax {{{
+        Plug 'vim-scripts/Nmap-syntax-highlight',          { 'for': [ 'nmap' ] }
+    " }}}
+
+    " Nginx config syntax {{{
+        Plug 'vim-scripts/nginx.vim',                      { 'for': [ 'nginx' ] }
     " }}}
 " }}}
 
