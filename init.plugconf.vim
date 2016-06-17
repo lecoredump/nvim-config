@@ -105,7 +105,7 @@ scriptencoding utf-8
         \ }
 
     augroup neomake
-        autocmd! BufWritePost * Neomake
+        autocmd BufWritePost,BufEnter * Neomake
     augroup END
     " }}}
 " }}}

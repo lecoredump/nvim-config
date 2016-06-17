@@ -185,8 +185,12 @@ call plug#begin()
         Plug 'vim-scripts/Nmap-syntax-highlight',          { 'for': [ 'nmap' ] }
     " }}}
 
-    " Nginx config syntax {{{
+    " Nginx configuration file syntax {{{
         Plug 'vim-scripts/nginx.vim',                      { 'for': [ 'nginx' ] }
+    " }}}
+
+    " Powershell syntax {{{
+        Plug 'PProvost/vim-ps1',                           { 'for': [ 'ps1' ] }
     " }}}
 " }}}
 
