@@ -279,5 +279,3 @@ if filereadable(expand('~/.config/nvim/init.plugconf.vim'))
     source ~/.config/nvim/init.plugconf.vim
 endif
 " }}}
-
-

@@ -37,6 +37,7 @@ scriptencoding utf-8
 " Versionning / Code Management {{{
     " Nerdtree
     noremap <C-e> :NERDTreeToggle<CR>
+    inoremap <C-e> <Esc>:NERDTreeToggle<CR>
 
     " Git {{{
     let g:gitgutter_eager = 1
@@ -93,22 +94,23 @@ scriptencoding utf-8
 
 " Syntax checking {{{
     " Neomake {{{
-    " Open quickfix after check if necessary
-    let g:neomake_open_list = 2
-    " Run each maker one after another
-    let g:neomake_serialize = 1
     let g:neomake_warning_sign= {
         \ 'text': '',
-        \ 'texthl': 'WarningMsg',
+        \ 'texthl': 'NeomakeWarningSign',
         \ }
     let g:neomake_error_sign = {
         \ 'text': '',
-        \ 'texthl': 'WarningMsg',
+        \ 'texthl': 'NeomakeErrorSign',
         \ }
 
-    augroup neomake
+    let g:neomake_open_list = 2
+    let g:neomake_serialize = 1
+    let g:neomake_list_height = 15
+
+    " Run neomake on buffersitch and filewrite
+    augroup neomake_autorun
         autocmd!
-        autocmd BufWritePost,BufEnter * Neomake
+        autocmd BufWritePost,BufWinEnter * Neomake
     augroup END
     " }}}
 " }}}
