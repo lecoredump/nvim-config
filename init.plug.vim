@@ -273,3 +273,11 @@ call plug#begin()
 " }}}
 
 call plug#end()
+
+" 'Plugins' and their configuration if available {{{
+if filereadable(expand('~/.config/nvim/init.plugconf.vim'))
+    source ~/.config/nvim/init.plugconf.vim
+endif
+" }}}
+
+

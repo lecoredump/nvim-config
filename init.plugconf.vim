@@ -25,6 +25,7 @@ scriptencoding utf-8
         let g:solarized_contrast='normal'
         let g:solarized_visibility='normal'
     endif
+    set background=dark
     " }}}
 
     " Indent guide {{{
@@ -73,8 +74,9 @@ scriptencoding utf-8
         let g:limelight_conceal_ctermfg = 'black'
         " Goyo & Limelight interaction
         augroup goyo_lime
-            autocmd! User GoyoEnter Limelight
-            autocmd! User GoyoLeave Limelight!
+            autocmd!
+            autocmd User GoyoEnter Limelight
+            autocmd User GoyoLeave Limelight!
         augroup END
     " }}}
 
@@ -105,6 +107,7 @@ scriptencoding utf-8
         \ }
 
     augroup neomake
+        autocmd!
         autocmd BufWritePost,BufEnter * Neomake
     augroup END
     " }}}

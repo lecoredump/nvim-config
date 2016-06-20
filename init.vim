@@ -13,24 +13,10 @@ endif
     " Environment {{{
     let g:python_host_prog = '/usr/bin/python2'
     let g:python3_host_prog = '/usr/bin/python3'
-    if ! exists('encoding')
-        set encoding=utf-8
-    endif
     scriptencoding utf-8
     " }}}
 
-    " 'Plugins' and their configuration if available {{{
-    if filereadable(expand('~/.config/nvim/init.plug.vim'))
-        source ~/.config/nvim/init.plug.vim
-        if filereadable(expand('~/.config/nvim/init.plugconf.vim'))
-            source ~/.config/nvim/init.plugconf.vim
-        endif
-    endif
-    " }}}
-
     " Interface {{{
-    set background=dark
-
     set tabpagemax=15
     set cursorline
     highlight clear SignColumn
@@ -49,11 +35,13 @@ endif
         if has('statusline')
             set laststatus=2
             " Filename
-            set statusline=%<%f\
+            set statusline=%<%f
             " Options
-            set statusline+=%w%h%m%r
-            " Fugitive integration (Git)
-            set statusline+=%{fugitive#statusline()}
+            set statusline+=\ %w%h%m%r
+            if filereadable(expand('~/.config/nvim/plugged/vim-fugitive'))
+                " Fugitive integration (Git)
+                set statusline+=%{fugitive#statusline()}
+            endif
             " Filetype
             set statusline+=\ [%{&ff}/%Y]
             " Current directory
@@ -119,7 +107,7 @@ endif
     " Functions {{{
     " Strips trailing whitespaces based on filetype
     function! StripTrailingWhitespaces()
-        if len(g:specific_strip_whitespace_filetypes) != 0
+        if exists("g:specific_strip_whitespace_filetypes")
             if index(g:specific_strip_whitespace_filetypes, &filetype) != -1
                 %s/\(.*[^) ]\{1,}\)\s\+$/\1/e
                 %s/)\+\s\{3,}$/)  /e
@@ -133,14 +121,21 @@ endif
 
     " Misc Autocommands {{{
     augroup misc
+        autocmd!
         " Automatically switch CWD to current files
-        autocmd BufEnter *.* if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+        autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 
         " Automatically remove trailing whitespaces before writing buffer
         autocmd BufWritePre * call StripTrailingWhitespaces()
     augroup END
     " }}}
 
+" }}}
+
+" 'Plugins' and their configuration if available {{{
+if filereadable(expand('~/.config/nvim/init.plug.vim'))
+    source ~/.config/nvim/init.plug.vim
+endif
 " }}}
 
 " Credentials config if available {{{
