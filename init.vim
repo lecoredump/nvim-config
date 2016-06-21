@@ -47,10 +47,9 @@ endif
             " Current directory
             set statusline+=\ [%{getcwd()}]
             " File navigation
-            set statusline+=%=%-14.(%l,%c%V%)\ %p%%
+            set statusline+=\ %=%-14.(%l,%c%V%)\ %p%%
         endif
         " }}}
-
 
         " Tabs, indents, folds and line display {{{
         set smarttab
@@ -92,10 +91,11 @@ endif
     " Default mappings (all filetypes) {{{
     " Leader
     let g:mapleader = ','
-    " Simpler return to normal mode
+    " Simpler return to normal mode from INSERT and TERMINAL
     inoremap jj <Esc>
     inoremap kk <Esc>
-    vnoremap jk <Esc>
+    tnoremap jj <Esc>
+    tnoremap kk <Esc>
 
     " Toggle current fold with space in normal mode
     nnoremap <space> za
@@ -107,15 +107,17 @@ endif
     " Functions {{{
     " Strips trailing whitespaces based on filetype
     function! StripTrailingWhitespaces()
-        if exists("g:specific_strip_whitespace_filetypes")
+        let l:curPos = winsaveview()
+        if exists('g:specific_strip_whitespace_filetypes')
             if index(g:specific_strip_whitespace_filetypes, &filetype) != -1
-                %s/\(.*[^) ]\{1,}\)\s\+$/\1/e
-                %s/)\+\s\{3,}$/)  /e
-                %s/^\s\+$//e
+                %sm/\(.*[^) ]\{1,}\)\s\+$/\1/e
+                %sm/)\+\s\{3,}$/)  /e
+                %sm/^\s\+$//e
             else
-                %s/\s\+$//e
+                %sm/\s\+$//e
             endif
         endif
+        call winrestview(l:curPos)
     endfunction
     " }}}
 

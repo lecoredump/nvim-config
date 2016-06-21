@@ -23,33 +23,6 @@ scriptencoding utf-8
 " Plugin loading {{{
 call plug#begin()
 
-" UI {{{
-
-    " Vim airline {{{
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
-    " }}}
-
-    " Colorschemes
-    Plug 'altercation/vim-colors-solarized'
-
-    " Indent level display
-    Plug 'nathanaelkane/vim-indent-guides'
-
-    " Folding enhanced
-    Plug 'Konfekt/FastFold'
-
-    " Display information regarding registers
-    Plug 'junegunn/vim-peekaboo'
-
-    " Semantic highlights, each variable its own
-    " TODO adapt colors to solarized colorscheme
-    Plug 'jaxbot/semantic-highlight.vim',    { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
-
-    " Colored parenthesis pair by pair
-    Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
-" }}}
-
 " Versionning / Code management {{{
     " File / Project browser
     Plug 'scrooloose/nerdtree',              { 'on': [ 'NERDTree', 'NERDTreeToggle' ] }
@@ -149,7 +122,7 @@ call plug#begin()
 
     " HTML / CSS {{{
         " Highlights HSLA, RGB (HEX and others) and color names
-        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc' ] }
+        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc', 'vim' ] }
 
         " Emoji completion, because we can
         Plug 'junegunn/vim-emoji',            { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc'] }
@@ -175,6 +148,12 @@ call plug#begin()
 
         " Virtual environment handling
         Plug 'jmcantrell/vim-virtualenv',     { 'for': [ 'python', 'htmldjango' ] }
+
+        " Better folding for python
+        Plug 'tmhedberg/SimpylFold',          { 'for': [ 'python' ] }
+
+        " Proper pep8 indentation scheme
+        Plug 'vim-scripts/indentpython.vim',  { 'for': [ 'python' ] }
     " }}}
 
     " CSV {{{
@@ -237,6 +216,33 @@ call plug#begin()
     Plug 'junegunn/vim-pseudocl' | Plug 'junegunn/vim-oblique'
 " }}}
 
+" UI {{{
+
+    " Vim airline {{{
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    " }}}
+
+    " Colorschemes
+    Plug 'altercation/vim-colors-solarized'
+
+    " Indent level display
+    Plug 'nathanaelkane/vim-indent-guides'
+
+    " Folding enhanced
+    Plug 'Konfekt/FastFold'
+
+    " Display information regarding registers
+    Plug 'junegunn/vim-peekaboo'
+
+    " Semantic highlights, each variable its own
+    " TODO adapt colors to solarized colorscheme
+    Plug 'jaxbot/semantic-highlight.vim',    { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
+
+    " Colored parenthesis pair by pair
+    Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
+" }}}
+
 " Other {{{
 
     " Undo tree browser
@@ -244,9 +250,6 @@ call plug#begin()
 
     " Text alignment utility
     Plug 'junegunn/vim-easy-align'
-
-    " Substitution preview
-    Plug 'osyo-manga/vim-over'
 
     " Only display the "region" you're working on
     Plug 'chrisbra/NrrwRgn'
