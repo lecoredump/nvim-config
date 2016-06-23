@@ -79,8 +79,6 @@ scriptencoding utf-8
 
 " Syntax checking {{{
     " Neomake {{{
-    " Logfile for debugging purposes
-    let g:neomake_logfile = '/tmp/nvim/neomake.log'
     " Gutter signs definition
     let g:neomake_error_sign = {'text': '', 'texthl': 'NeomakeErrorSign'}
     let g:neomake_warning_sign = {'text': '', 'texthl': 'NeomakeWarningSign'}
@@ -146,7 +144,7 @@ scriptencoding utf-8
     " }}}
 
     " Unite {{{
-    nnoremap <C-l> :Unite file file_rec<CR>
+    nnoremap <leader>l :Unite file file_rec<CR>
     " }}}
 " }}}
 " }}}

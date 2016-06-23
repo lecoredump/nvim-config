@@ -11,8 +11,8 @@ endif
 
 " Default configuration {{{
     " Environment {{{
-    let g:python_host_prog = '/usr/bin/python2'
-    let g:python3_host_prog = '/usr/bin/python3'
+    let g:python_host_prog = exepath('python2')
+    let g:python3_host_prog = exepath('python3')
     scriptencoding utf-8
     " }}}
 
