@@ -1,6 +1,6 @@
 " Modeline and description {{{
 " Frenchbeard's neovim config
-" vim: set sw=4 ts=4 sts=4 tw=78 foldmarker={{{,}}} foldmethod=marker :
+":vim:sw=4:ts=4:sts=4:tw=78:foldmarker={{{,}}}:foldmethod=marker:
 " }}}
 
 " 'Before' config if available {{{
@@ -94,8 +94,19 @@ endif
     " Simpler return to normal mode from INSERT and TERMINAL
     inoremap jj <Esc>
     inoremap kk <Esc>
-    tnoremap jj <Esc>
-    tnoremap kk <Esc>
+    tnoremap jj <C-\><C-n>
+    tnoremap kk <C-\><C-n>
+
+    " Less cumbersome movement between "windows"
+    tnoremap <A-h> <C-\><C-n><C-w>h
+    tnoremap <A-j> <C-\><C-n><C-w>j
+    tnoremap <A-k> <C-\><C-n><C-w>k
+    tnoremap <A-l> <C-\><C-n><C-w>l
+    nnoremap <A-h> <C-w>h
+    nnoremap <A-j> <C-w>j
+    nnoremap <A-k> <C-w>k
+    nnoremap <A-l> <C-w>l
+
 
     " Toggle current fold with space in normal mode
     nnoremap <space> za
@@ -132,12 +143,6 @@ endif
     augroup END
     " }}}
 
-" }}}
-
-" 'Plugins' and their configuration if available {{{
-if filereadable(expand('~/.config/nvim/init.plug.vim'))
-    source ~/.config/nvim/init.plug.vim
-endif
 " }}}
 
 " Credentials config if available {{{
