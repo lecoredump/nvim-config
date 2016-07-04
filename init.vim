@@ -1,6 +1,6 @@
 " Modeline and description {{{
 " Frenchbeard's neovim config
-":vim:sw=4:ts=4:sts=4:tw=78:foldmarker={{{,}}}:foldmethod=marker:
+":sw=4:ts=4:sts=4:tw=78:foldmarker={{{,}}}:foldmethod=marker:
 " }}}
 
 " 'Before' config if available {{{
@@ -89,6 +89,7 @@ endif
     " }}}
 
     " Default mappings (all filetypes) {{{
+    " Mainly "general" motions
     " Leader
     let g:mapleader = ','
     " Simpler return to normal mode from INSERT and TERMINAL
@@ -107,6 +108,12 @@ endif
     nnoremap <A-k> <C-w>k
     nnoremap <A-l> <C-w>l
 
+    " DO NOT USE ARROW KEYS !
+    " I MEAN IT
+    nnoremap <Up> <Nop>
+    nnoremap <Down> <Nop>
+    nnoremap <Left> <Nop>
+    nnoremap <Right> <Nop>
 
     " Toggle current fold with space in normal mode
     nnoremap <space> za
@@ -143,6 +150,12 @@ endif
     augroup END
     " }}}
 
+" }}}
+
+" Plugins management, if available {{{
+if filereadable(expand('~/.config/nvim/init.plug.vim'))
+    source ~/.config/nvim/init.plug.vim
+endif
 " }}}
 
 " Credentials config if available {{{
