@@ -246,10 +246,10 @@ call plug#begin()
 " Other {{{
 
     " Undo tree browser
-    Plug 'mbbill/undotree'
+    Plug 'mbbill/undotree',                  { 'on': 'UndotreeToggle' }
 
     " Text alignment utility
-    Plug 'junegunn/vim-easy-align'
+    Plug 'junegunn/vim-easy-align',          { 'on': [ '<Plug>EasyAlign', 'EasyAlign' ] }
 
     " Only display the "region" you're working on
     Plug 'chrisbra/NrrwRgn'

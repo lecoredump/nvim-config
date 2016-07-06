@@ -88,6 +88,11 @@ endif
     set smartcase
     " }}}
 
+    " Split behaviour {{{
+    set splitbelow
+    set splitright
+    " }}}
+
     " Default mappings (all filetypes) {{{
     " Mainly "general" motions
     " Leader
@@ -98,7 +103,7 @@ endif
     tnoremap jj <C-\><C-n>
     tnoremap kk <C-\><C-n>
 
-    " Less cumbersome movement between "windows"
+    " Less cumbersome movement between "windows" {{{
     tnoremap <A-h> <C-\><C-n><C-w>h
     tnoremap <A-j> <C-\><C-n><C-w>j
     tnoremap <A-k> <C-\><C-n><C-w>k
@@ -107,6 +112,7 @@ endif
     nnoremap <A-j> <C-w>j
     nnoremap <A-k> <C-w>k
     nnoremap <A-l> <C-w>l
+    " }}}
 
     " DO NOT USE ARROW KEYS !
     " I MEAN IT
@@ -115,8 +121,23 @@ endif
     nnoremap <Left> <Nop>
     nnoremap <Right> <Nop>
 
+    " Move visual selection arround, while updating indentation
+    vnoremap J :m '>+1<CR>gv=gv
+    vnoremap K :m '<-2<CR>gv=gv
+
+    " Keep visual selection when indenting
+    vnoremap < <gv
+    vnoremap > >gv
+
+    " Indent with tab in visual mode, because we can
+    vnoremap <Tab> >gv
+    vnoremap <S-Tab> <gv
+
     " Toggle current fold with space in normal mode
     nnoremap <space> za
+
+    " Toggle paste mode
+    nnoremap <leader>p :setlocal paste!<CR>
 
     " For when you forget to sudo.. Really write the file.
     cnoremap w!! w !sudo tee % >/dev/null
@@ -140,13 +161,22 @@ endif
     " }}}
 
     " Misc Autocommands {{{
-    augroup misc
+    augroup init_vim
         autocmd!
         " Automatically switch CWD to current files
         autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 
         " Automatically remove trailing whitespaces before writing buffer
-        autocmd BufWritePre * call StripTrailingWhitespaces()
+        autocmd BufWritePre * :call StripTrailingWhitespaces()
+
+        " Automatically resize following terminal
+        autocmd VimResized * :wincmd =
+
+        " Automatically source any vim configuration
+        autocmd BufWritePost *init*.vim :source %
+
+        " Leave paste mode on InsertLeave
+        autocmd InsertLeave * silent! set nopaste
     augroup END
     " }}}
 
