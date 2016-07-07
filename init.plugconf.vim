@@ -1,5 +1,5 @@
 " Modeline and description {{{
-" Plugin configuration.
+" Plug in configuration.
 " Uses https://github.com/junegunn/vim-plug for plugin management.
 " vim: set sw=4 ts=4 sts=4 tw=78 ft=vim foldmarker={{{,}}} foldmethod=marker :
 scriptencoding utf-8
@@ -43,14 +43,41 @@ scriptencoding utf-8
 
 " Languages / Filetypes {{{
     " Pandoc / Markdown / Latex / Txt / Writing {{{
+        " Goyo & Limelight interaction {{{
         " Limelight conceal color for solarized theme
         let g:limelight_conceal_ctermfg = 'black'
-        " Goyo & Limelight interaction
+
         augroup goyo_lime
             autocmd!
             autocmd User GoyoEnter Limelight
             autocmd User GoyoLeave Limelight!
         augroup END
+
+        " Allow automatic diff display in the gutter even in Goyo
+        nnoremap <F2> :Goyo<CR>:GitGutterEnable<CR>
+
+        " }}}
+
+        " Quote textobject config {{{
+        " Integrate to matchit
+        let g:textobj#quote#matchit = 1
+
+        " Educate by default
+        let g:textobj#quote#educate = 1
+
+        " Autocmds for specific filetypes
+        augroup writing_textobjs
+            autocmd!
+            autocmd FileType markdown call textobj#quote#init()
+            autocmd FileType pandoc call textobj#quote#init()
+            autocmd FileType text call textobj#quote#init()
+            autocmd FileType tex call textobj#quote#init()
+            autocmd FileType markdown call textobj#sentence#init()
+            autocmd FileType pandoc call textobj#sentence#init()
+            autocmd FileType text call textobj#sentence#init()
+            autocmd FileType tex call textobj#sentence#init()
+        augroup END
+        " }}}
     " }}}
 
     " HTML / CSS {{{

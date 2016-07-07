@@ -1,6 +1,6 @@
 " Modeline and description {{{
 " Frenchbeard's neovim config
-":sw=4:ts=4:sts=4:tw=78:foldmarker={{{,}}}:foldmethod=marker:
+" vim: set sw=4 ts=4 sts=4 tw=78 ft=vim foldmarker={{{,}}} foldmethod=marker :
 " }}}
 
 " 'Before' config if available {{{
@@ -97,11 +97,21 @@ endif
     " Mainly "general" motions
     " Leader
     let g:mapleader = ','
-    " Simpler return to normal mode from INSERT and TERMINAL
+
+    " Why 2 keystrokes for command mode ?
+    nnoremap ; :
+    nnoremap : ;
+    vnoremap ; :
+    vnoremap : ;
+
+    " Simpler return to normal mode from INSERT, COMMAND MODE and TERMINAL {{{
     inoremap jj <Esc>
     inoremap kk <Esc>
     tnoremap jj <C-\><C-n>
     tnoremap kk <C-\><C-n>
+    cnoremap jj <Esc>
+    cnoremap kk <Esc>
+    " }}}
 
     " Less cumbersome movement between "windows" {{{
     tnoremap <A-h> <C-\><C-n><C-w>h
@@ -139,7 +149,7 @@ endif
     " Toggle paste mode
     nnoremap <leader>p :setlocal paste!<CR>
 
-    " For when you forget to sudo.. Really write the file.
+    " For when you forget to use sudoedit. Really write the file.
     cnoremap w!! w !sudo tee % >/dev/null
     " }}}
 

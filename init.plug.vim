@@ -112,17 +112,27 @@ call plug#begin()
 
         " Accentuated characters for those not in your keymap
         " TODO integrate as in http://junegunn.kr/2014/06/emoji-completion-in-vim/
-        Plug 'airblade/vim-accent',           { 'for': [ 'pandoc', 'markdown', 'latex', 'text' ] }
+        Plug 'airblade/vim-accent',           { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
 
         " Distraction-free writing
-        Plug 'junegunn/goyo.vim',             { 'on': [ 'GoyoEnter' ] }
+        Plug 'junegunn/goyo.vim',             { 'on': [ 'GoyoEnter', 'Goyo' ] }
         Plug 'junegunn/limelight.vim',        { 'on': [ 'Limelight' ] }
 
+        " "Bad" words highlighting
+        Plug 'reedes/vim-wordy',              { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+
+        " Extends spell checking
+        Plug 'reedes/vim-lexical',            { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+
+        " Writing specific stuff (no more straight quotes, for example)
+        Plug 'kana/vim-textobj-user',         { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+        Plug 'reedes/vim-textobj-quote',      { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+        Plug 'reedes/vim-textobj-sentence',      { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
     " }}}
 
     " HTML / CSS {{{
         " Highlights HSLA, RGB (HEX and others) and color names
-        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc', 'vim' ] }
+        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'vim' ] }
 
         " Emoji completion, because we can
         Plug 'junegunn/vim-emoji',            { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc'] }
