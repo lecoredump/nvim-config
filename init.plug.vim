@@ -124,10 +124,14 @@ call plug#begin()
         " Extends spell checking
         Plug 'reedes/vim-lexical',            { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
 
+        " Pencil mode
+        Plug 'reedes/vim-pencil',             { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+
         " Writing specific stuff (no more straight quotes, for example)
         Plug 'kana/vim-textobj-user',         { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
         Plug 'reedes/vim-textobj-quote',      { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
-        Plug 'reedes/vim-textobj-sentence',      { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+        Plug 'reedes/vim-textobj-sentence',   { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+        Plug 'reedes/vim-litecorrect',        { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
     " }}}
 
     " HTML / CSS {{{
