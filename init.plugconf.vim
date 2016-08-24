@@ -58,26 +58,38 @@ scriptencoding utf-8
 
         " }}}
 
+        " vim-pandoc {{{
+        " TODO : finish pandoc config
+        " Support for markdown
+        let g:pandoc#filetypes#handled = [ 'pandoc', 'markdown' ]
+
+        " Smart formatting
+        let g:pandoc#formatting#smart_autoformat_on_cursormoved = 1
+
+        " Fold YAML header
+        let g:pandoc#folding#fold_yaml = 1
+
+        " Display output buffer on errors
+        let g:pandoc#command#use_message_buffers = 1
+        " }}}
+
         " Quote textobject config {{{
         " Integrate to matchit
         let g:textobj#quote#matchit = 1
 
         " Educate by default
         let g:textobj#quote#educate = 1
+        " }}}
 
         " Autocmds for specific filetypes
-        augroup writing_textobjs
+        augroup writing_init
             autocmd!
-            autocmd FileType markdown call textobj#quote#init()
-            autocmd FileType pandoc call textobj#quote#init()
-            autocmd FileType text call textobj#quote#init()
-            autocmd FileType tex call textobj#quote#init()
-            autocmd FileType markdown call textobj#sentence#init()
-            autocmd FileType pandoc call textobj#sentence#init()
-            autocmd FileType text call textobj#sentence#init()
-            autocmd FileType tex call textobj#sentence#init()
+            autocmd FileType pandoc,markdown,tex,text call pencil#init()
+                        \ | call lexical#init()
+                        \ | call litecorrect#init()
+                        \ | call textobj#quote#init()
+                        \ | call textobj#sentence#init()
         augroup END
-        " }}}
     " }}}
 
     " HTML / CSS {{{
