@@ -61,7 +61,7 @@ scriptencoding utf-8
         " vim-pandoc {{{
         " TODO : finish pandoc config
         " Support for markdown
-        let g:pandoc#filetypes#handled = [ 'pandoc', 'markdown', 'mkd' ]
+        let g:pandoc#filetypes#handled = [ 'pandoc', 'markdown' ]
 
         " Smart formatting
         let g:pandoc#formatting#smart_autoformat_on_cursormoved = 1
@@ -72,6 +72,7 @@ scriptencoding utf-8
         " Display output buffer on errors
         let g:pandoc#command#use_message_buffers = 1
         " }}}
+
         " Quote textobject config {{{
         " Integrate to matchit
         let g:textobj#quote#matchit = 1
@@ -83,7 +84,7 @@ scriptencoding utf-8
         " Autocmds for specific filetypes
         augroup writing_init
             autocmd!
-            autocmd FileType pandoc,markdown,mkd,tex,text call pencil#init()
+            autocmd FileType pandoc,markdown,tex,text call pencil#init()
                         \ | call lexical#init()
                         \ | call litecorrect#init()
                         \ | call textobj#quote#init()

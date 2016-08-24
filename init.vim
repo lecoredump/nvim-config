@@ -131,6 +131,9 @@ endif
     nnoremap <Left> <Nop>
     nnoremap <Right> <Nop>
 
+    " Indent whole file
+    nnoremap == ggVG=
+
     " Move visual selection arround, while updating indentation
     vnoremap J :m '>+1<CR>gv=gv
     vnoremap K :m '<-2<CR>gv=gv
