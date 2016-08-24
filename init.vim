@@ -149,7 +149,7 @@ endif
     " Toggle paste mode
     nnoremap <leader>p :setlocal paste!<CR>
 
-    " For when you forget to use sudoedit. Really write the file.
+    " For when you forget to use sudoedit. Really write the file down.
     cnoremap w!! w !sudo tee % >/dev/null
     " }}}
 
