@@ -182,6 +182,10 @@ call plug#begin()
         Plug 'vim-scripts/nginx.vim',                      { 'for': [ 'nginx' ] }
     " }}}
 
+    " Haproxy configuration file syntax {{{
+        Plug 'vim-scripts/haproxy',                    { 'for': [ 'haproxy' ] }
+    " }}}
+
     " Powershell syntax {{{
         Plug 'PProvost/vim-ps1',                           { 'for': [ 'ps1' ] }
     " }}}

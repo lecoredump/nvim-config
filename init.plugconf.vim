@@ -37,8 +37,8 @@ scriptencoding utf-8
     " }}}
 
     " Supertab default completion
-    " let g:SuperTabDefaultCompletionType = 'context'
-    " let g:SuperTabContextDefaultCompletionType = '<c-n>'
+    let g:SuperTabDefaultCompletionType = 'context'
+    let g:SuperTabContextDefaultCompletionType = '<c-n>'
 " }}}
 
 " Languages / Filetypes {{{
@@ -186,6 +186,14 @@ scriptencoding utf-8
 
     " Unite {{{
     nnoremap <leader>l :Unite file file_rec<CR>
+    " }}}
+
+    " EasyAlign {{{
+    " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+    vmap <Enter> <Plug>(EasyAlign)
+
+    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+    nmap ga <Plug>(EasyAlign)
     " }}}
 " }}}
 " }}}
