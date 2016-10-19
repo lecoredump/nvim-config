@@ -37,8 +37,8 @@ scriptencoding utf-8
     " }}}
 
     " Supertab default completion
-    " let g:SuperTabDefaultCompletionType = 'context'
-    " let g:SuperTabContextDefaultCompletionType = '<c-n>'
+    let g:SuperTabDefaultCompletionType = 'context'
+    let g:SuperTabContextDefaultCompletionType = '<c-n>'
 " }}}
 
 " Languages / Filetypes {{{
@@ -84,7 +84,7 @@ scriptencoding utf-8
         " Autocmds for specific filetypes
         augroup writing_init
             autocmd!
-            autocmd FileType pandoc,markdown,tex,text call pencil#init()
+            autocmd FileType pandoc,markdown,text call pencil#init()
                         \ | call lexical#init()
                         \ | call litecorrect#init()
                         \ | call textobj#quote#init()
@@ -101,10 +101,18 @@ scriptencoding utf-8
             let g:vcoolor_custom_picker = 'zenity --show-palette'
         endif
     " }}}
+
     " Python {{{
         " Preview docstring in folded classes and methods
-        let g:SimpyFold_docstring_preview = 1
+        let g:SimpylFold_docstring_preview = 1
 
+        " Do not fold imports
+        let g:SimpylFold_fold_import = 0
+
+        " Virtualenv default directory
+        let g:virtualenv_directory = '~/.pyenv'
+
+        " Misc autocommands
         augroup ft_python
             autocmd!
             " Automatically sort imports on save for python files
@@ -112,6 +120,8 @@ scriptencoding utf-8
             " SimpyFold configuration
             autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
             autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
+            " Specific fold for Django settings
+            autocmd BufWinEnter settings.py,base.py,dev.py,prod.py setlocal foldmethod=marker
         augroup END
     " }}}
 " }}}
@@ -126,7 +136,7 @@ scriptencoding utf-8
     let g:neomake_message_sign = {'text': '', 'texthl': 'NeomakeMessageSign'}
     let g:neomake_info_sign = {'text': '', 'texthl': 'NeomakeInfoSign'}
     " Automatically open quickfix view if necessary
-    let g:neomake_open_list = 2
+    let g:neomake_open_list = 0
 
     augroup neomake_autorun
         autocmd!
@@ -138,6 +148,24 @@ scriptencoding utf-8
         autocmd ColorScheme * highlight NeomakeMessageSign ctermfg=226 guifg=#ffff00
         autocmd ColorScheme * highlight NeomakeInfoSign ctermfg=46 guifg=#00ff00
     augroup END
+    " }}}
+" }}}
+
+" Motions {{{
+    " vim-multiple-cursors {{{
+    " Called once right before you start selecting multiple cursors
+    function! Multiple_cursors_before()
+    if exists(':NeoCompleteLock')==2
+        exe 'NeoCompleteLock'
+    endif
+    endfunction
+
+    " Called once only when the multiple selection is canceled (default <Esc>)
+    function! Multiple_cursors_after()
+    if exists(':NeoCompleteUnlock')==2
+        exe 'NeoCompleteUnlock'
+    endif
+    endfunction
     " }}}
 " }}}
 
@@ -186,6 +214,14 @@ scriptencoding utf-8
 
     " Unite {{{
     nnoremap <leader>l :Unite file file_rec<CR>
+    " }}}
+
+    " EasyAlign {{{
+    " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+    vnoremap <Enter> <Plug>(EasyAlign)
+
+    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+    nnoremap ga <Plug>(EasyAlign)
     " }}}
 " }}}
 " }}}

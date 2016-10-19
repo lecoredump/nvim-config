@@ -109,6 +109,7 @@ call plug#begin()
     " Pandoc / Markdown / Latex / Txt / Writing {{{
         Plug 'vim-pandoc/vim-pandoc',         { 'for': [ 'pandoc', 'markdown' ] }
         Plug 'vim-pandoc/vim-pandoc-syntax',  { 'for': [ 'pandoc', 'markdown' ] }
+        Plug 'vim-latex/vim-latex',           { 'for': [ 'tex' ] }
 
         " Accentuated characters for those not in your keymap
         " TODO integrate as in http://junegunn.kr/2014/06/emoji-completion-in-vim/
@@ -136,14 +137,14 @@ call plug#begin()
 
     " HTML / CSS {{{
         " Highlights HSLA, RGB (HEX and others) and color names
-        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'vim' ] }
+        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'vim', 'css' ] }
 
         " Emoji completion, because we can
         Plug 'junegunn/vim-emoji',            { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc'] }
 
         if executable('zenity') || executable('yad')
             " Color picker, requires either yad or zenity
-            Plug 'KabbAmine/vCoolor.vim',     { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc' ] }
+            Plug 'KabbAmine/vCoolor.vim',     { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc', 'css' ] }
         endif
 
         " Convert between utf8 and HTML entities
@@ -182,6 +183,10 @@ call plug#begin()
         Plug 'vim-scripts/nginx.vim',                      { 'for': [ 'nginx' ] }
     " }}}
 
+    " Haproxy configuration file syntax {{{
+        Plug 'vim-scripts/haproxy',                    { 'for': [ 'haproxy' ] }
+    " }}}
+
     " Powershell syntax {{{
         Plug 'PProvost/vim-ps1',                           { 'for': [ 'ps1' ] }
     " }}}
@@ -213,7 +218,7 @@ call plug#begin()
 
 " Motions {{{
     " Multiple cursors
-    Plug 'kristijanhusak/vim-multiple-cursors'
+    Plug 'terryma/vim-multiple-cursors'
 
     " Adds new textobjects : pair, quote, separator, argument
     Plug 'wellle/targets.vim'
@@ -278,6 +283,12 @@ call plug#begin()
         " Taskwarrior interface
         Plug 'blindFS/vim-taskwarrior',       { 'on': 'TW' }
     endif
+
+    " Calendar to simplify date insertion
+    Plug 'mattn/calendar-vim'
+
+    " Org mode clone
+    Plug 'jceb/vim-orgmode'
 
     " Gather TODOs, BUGs and so on in a single window
     " Plug 'vim-scripts/GrepTasks'
