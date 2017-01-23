@@ -137,7 +137,7 @@ call plug#begin()
 
     " HTML / CSS {{{
         " Highlights HSLA, RGB (HEX and others) and color names
-        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'vim', 'css' ] }
+        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'vim', 'css', 'xdefaults' ] }
 
         " Emoji completion, because we can
         Plug 'junegunn/vim-emoji',            { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc'] }
@@ -193,7 +193,11 @@ call plug#begin()
 " }}}
 
 " Syntax checking {{{
+    " Programming languages
     Plug 'neomake/neomake'
+
+    " Writing
+        Plug 'dpelle/vim-Grammalecte',                     { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
 " }}}
 
 " Tim Pope goodness {{{
