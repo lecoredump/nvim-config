@@ -3,7 +3,7 @@
 " vim: set sw=4 ts=4 sts=4 tw=78 ft=vim foldmarker={{{,}}} foldmethod=marker :
 " }}}
 
-" 'Before' config if available {{{
+" 'Before' config {{{
 if filereadable(expand('~/.config/nvim/init.before.vim'))
     source ~/.config/nvim/init.before.vim
 endif
@@ -11,13 +11,25 @@ endif
 
 " Default configuration {{{
     " Environment {{{
-    let g:python_host_prog = exepath('python2')
-    let g:python3_host_prog = exepath('python3')
+        " Python elements {{{
+        " Paths, defaults to system python
+        if filereadable(expand('~/.pyenv/neovim3'))
+            let g:python3_host_prog = expand('~/.pyenv/neovim3/bin/python3')
+        else
+            let g:python3_host_prog = exepath('python3')
+        endif
+
+        if filereadable(expand('~/.pyenv/neovim2'))
+            let g:python_host_prog = expand('~/.pyenv/neovim2/bin/python2')
+        else
+            let g:python_host_prog = exepath('python2')
+        endif
+        " }}}
+
     scriptencoding utf-8
     " }}}
 
-    " Interface {{{
-    set tabpagemax=15
+    " UI {{{
     set cursorline
     highlight clear SignColumn
     highlight clear LineNr
@@ -52,23 +64,28 @@ endif
         " }}}
 
         " Tabs, indents, folds and line display {{{
+        " General indent behaviour
         set smarttab
         set tabstop=4
         set shiftwidth=4
         set shiftround
         set softtabstop=4
         set expandtab
-        set textwidth=79
         set autoindent
 
+        " Buffer limits
+        set textwidth=79
         set whichwrap=b,s,h,l,<,>,[,]
         set nowrap
-        set scrolljump=5
+        set scroll=15
         set scrolloff=3
+        set sidescroll=10
+        set sidescrolloff=5
+
         set showmatch
         set foldenable
         set list
-        set listchars=tab:›\ ,trail:•,extends:#,nbsp:.
+        set listchars=tab:›\ ,trail:•,extends:#,precedes:>,nbsp:✯
 
         set backspace=indent,eol,start
         set linespace=0
@@ -96,24 +113,23 @@ endif
     " Default mappings (all filetypes) {{{
     " Mainly "general" motions
     " Leader
-    let g:mapleader = ','
+    let mapleader = "\<SPACE>"
 
-    " Why 2 keystrokes for command mode ?
+    " Why 2 keystrokes for command mode ? {{{
     nnoremap ; :
     nnoremap : ;
     vnoremap ; :
     vnoremap : ;
-
-    " Simpler return to normal mode from INSERT, COMMAND MODE and TERMINAL {{{
-    inoremap jj <Esc>
-    inoremap kk <Esc>
-    tnoremap jj <C-\><C-n>
-    tnoremap kk <C-\><C-n>
-    cnoremap jj <Esc>
-    cnoremap kk <Esc>
     " }}}
 
-    " Less cumbersome movement between "windows" {{{
+    " Simpler return to normal mode from INSERT, COMMAND MODE and TERMINAL {{{
+    inoremap jk <Esc>
+    tnoremap jk <C-\><C-n>
+    cnoremap jk <Esc>
+    vnoremap jk <Esc>
+    " }}}
+
+    " Less cumbersome movement between "splits" {{{
     tnoremap <A-h> <C-\><C-n><C-w>h
     tnoremap <A-j> <C-\><C-n><C-w>j
     tnoremap <A-k> <C-\><C-n><C-w>k
@@ -146,11 +162,10 @@ endif
     vnoremap <Tab> >gv
     vnoremap <S-Tab> <gv
 
-    " Toggle current fold with space in normal mode
-    nnoremap <space> za
-
+    " Toggle fold
+    nnoremap <leader><space> za
     " Toggle paste mode
-    nnoremap <leader>p :setlocal paste!<CR>
+    nnoremap <leader>p :setlocal paste!<CR>windows
 
     " For when you forget to use sudoedit. Really write the file down.
     cnoremap w!! w !sudo tee % >/dev/null
@@ -185,8 +200,6 @@ endif
         " Automatically resize following terminal
         autocmd VimResized * :wincmd =
 
-        " Automatically source any vim configuration
-        autocmd BufWritePost *init*.vim :source %
 
         " Leave paste mode on InsertLeave
         autocmd InsertLeave * silent! set nopaste
@@ -195,19 +208,26 @@ endif
 
 " }}}
 
-" Plugins management, if available {{{
+" Plugins management {{{
 if filereadable(expand('~/.config/nvim/init.plug.vim'))
     source ~/.config/nvim/init.plug.vim
 endif
 " }}}
 
-" Credentials config if available {{{
+" Misc filetypes {{{
+" Not complex enough to require a plugin
+if filereadable(expand('~/.config/nvim/init.filetypes.vim'))
+    source ~/.config/nvim/init.filetypes.vim
+endif
+"}}}
+
+" Credentials config {{{
 if filereadable(expand('~/.config/nvim/init.creds.vim'))
     source ~/.config/nvim/init.creds.vim
 endif
 " }}}
 
-" 'After' config if available {{{
+" 'After' config {{{
 if filereadable(expand('~/.config/nvim/init.vim.after'))
     source ~/.config/nvim/init.vim.after
 endif

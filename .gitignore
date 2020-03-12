@@ -64,6 +64,8 @@ __pycache__/
 #################
 
 autoload/
+# Tagbar config
+tags
 plugged/
 spell/
 .undo/

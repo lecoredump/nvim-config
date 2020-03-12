@@ -21,7 +21,44 @@ scriptencoding utf-8
 " }}}
 
 " Plugin loading {{{
-call plug#begin()
+call plug#begin('~/.config/nvim/plugged')
+
+" UI {{{
+
+    " Ruler / statusline {{{
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    " }}}
+
+    " Colorschemes
+    Plug 'altercation/vim-colors-solarized'
+
+    " Indent level display
+    Plug 'nathanaelkane/vim-indent-guides'
+
+    " Folding enhanced
+    Plug 'Konfekt/FastFold'
+
+    " Keep cursor and other view information
+    Plug 'zhimsel/vim-stay'
+
+    " Display information regarding registers
+    Plug 'junegunn/vim-peekaboo'
+
+    " Denite {{{
+    " Unite ALL THE THINGS (fuzzy search through multiple 'sources')
+    Plug 'Shougo/denite.nvim'
+    " }}}
+
+    " Variations {{{
+    " Semantic highlights, each variable its own
+    " TODO adapt colors to solarized colorscheme
+    Plug 'jaxbot/semantic-highlight.vim',    { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
+
+    " Colored parenthesis pair by pair
+    Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
+    " }}}
+" }}}
 
 " Versionning / Code management {{{
     " File / Project browser
@@ -62,12 +99,24 @@ call plug#begin()
     if executable('ctags')
         " Coming too close to an IDE maybe ?
         Plug 'majutsushi/tagbar'
+        Plug 'ludovicchabant/vim-gutentags'
     endif
 " }}}
 
 " Completion {{{
     " Asynchronous completion for neovim {{{
-    Plug 'Shougo/deoplete.nvim',            { 'do': function('DoRemote') }
+    if has('nvim')
+        Plug 'Shougo/deoplete.nvim',            { 'do': ':UpdateRemotePlugins' }
+    else
+        Plug 'Shougo/deoplete.nvim'
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+    let g:deoplete#enable_at_startup = 1
+
+
+    " Ctags source for deoplete
+    Plug 'deoplete-plugins/deoplete-tag'
 
     " Python source for deoplete
     Plug 'zchee/deoplete-jedi',             { 'for': [ 'python', 'htmldjango' ] }
@@ -109,7 +158,8 @@ call plug#begin()
     " Pandoc / Markdown / Latex / Txt / Writing {{{
         Plug 'vim-pandoc/vim-pandoc',         { 'for': [ 'pandoc', 'markdown' ] }
         Plug 'vim-pandoc/vim-pandoc-syntax',  { 'for': [ 'pandoc', 'markdown' ] }
-        Plug 'vim-latex/vim-latex',           { 'for': [ 'tex' ] }
+        Plug 'lervag/vimtex',                 { 'for': [ 'tex' ] }
+        Plug 'xuhdev/vim-latex-live-preview', { 'for': [ 'tex' ] }
 
         " Accentuated characters for those not in your keymap
         " TODO integrate as in http://junegunn.kr/2014/06/emoji-completion-in-vim/
@@ -125,8 +175,8 @@ call plug#begin()
         " Extends spell checking
         Plug 'reedes/vim-lexical',            { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
 
-        " Pencil mode
-        Plug 'reedes/vim-pencil',             { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+        " Markdown preview
+        Plug 'conornewton/vim-pandoc-markdown-preview' { 'for': [ 'markdown', 'pandoc' ] }
 
         " Writing specific stuff (no more straight quotes, for example)
         Plug 'kana/vim-textobj-user',         { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
@@ -137,7 +187,7 @@ call plug#begin()
 
     " HTML / CSS {{{
         " Highlights HSLA, RGB (HEX and others) and color names
-        Plug 'gorodinskiy/vim-coloresque',    { 'for': [ 'html', 'htmldjango', 'vim', 'css', 'xdefaults' ] }
+        Plug 'gorodinskiy/vim-coloresque',
 
         " Emoji completion, because we can
         Plug 'junegunn/vim-emoji',            { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc'] }
@@ -190,14 +240,23 @@ call plug#begin()
     " Powershell syntax {{{
         Plug 'PProvost/vim-ps1',                           { 'for': [ 'ps1' ] }
     " }}}
-" }}}
+
+    " Solidity {{{
+        Plug 'tomlion/vim-solidity'
+    " }}}
+
+    " Cisco
+        Plug 'CyCoreSystems/vim-cisco-ios'
+    " }}}
 
 " Syntax checking {{{
     " Programming languages
     Plug 'neomake/neomake'
 
     " Writing
+    if exists("g:grammalecte_cli_py")
         Plug 'dpelle/vim-Grammalecte',                     { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+    endif
 " }}}
 
 " Tim Pope goodness {{{
@@ -232,38 +291,8 @@ call plug#begin()
 " }}}
 
 " Search {{{
-    " Unite ALL THE THINGS (fuzzy search through multiple 'sources')
-    Plug 'Shougo/unite.vim'
-
     " Augmented '/' (requires vim-pseudocl)
     Plug 'junegunn/vim-pseudocl' | Plug 'junegunn/vim-oblique'
-" }}}
-
-" UI {{{
-
-    " Vim airline {{{
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
-    " }}}
-
-    " Colorschemes
-    Plug 'altercation/vim-colors-solarized'
-
-    " Indent level display
-    Plug 'nathanaelkane/vim-indent-guides'
-
-    " Folding enhanced
-    Plug 'Konfekt/FastFold'
-
-    " Display information regarding registers
-    Plug 'junegunn/vim-peekaboo'
-
-    " Semantic highlights, each variable its own
-    " TODO adapt colors to solarized colorscheme
-    Plug 'jaxbot/semantic-highlight.vim',    { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
-
-    " Colored parenthesis pair by pair
-    Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
 " }}}
 
 " Other {{{
@@ -277,26 +306,13 @@ call plug#begin()
     " Only display the "region" you're working on
     Plug 'chrisbra/NrrwRgn'
 
-    if executable('curl') || executable('wget')
-        " Requires curl or wget
-        " Web API interaction
-        Plug 'mattn/webapi-vim'
-    endif
-
     if executable('task')
         " Taskwarrior interface
         Plug 'blindFS/vim-taskwarrior',       { 'on': 'TW' }
     endif
 
-    " Calendar to simplify date insertion
-    Plug 'mattn/calendar-vim'
-
-    " Org mode clone
-    Plug 'jceb/vim-orgmode'
-
-    " Gather TODOs, BUGs and so on in a single window
-    " Plug 'vim-scripts/GrepTasks'
-    " TODO check above plugin to reproduce
+    " Personal wiki and notes, plus a whole lot of stuff
+    Plug 'vimwiki/vimwiki'
 
     " ICONS EVERYWHERE, must be loaded last for interaction with other
     " plugins. Patched fonts : https://github.com/ryanoasis/nerd-fonts
@@ -305,6 +321,8 @@ call plug#begin()
 " }}}
 
 call plug#end()
+
+" }}}
 
 " 'Plugins' and their configuration if available {{{
 if filereadable(expand('~/.config/nvim/init.plugconf.vim'))

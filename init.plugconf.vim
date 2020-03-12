@@ -2,10 +2,60 @@
 " Plug in configuration.
 " Uses https://github.com/junegunn/vim-plug for plugin management.
 " vim: set sw=4 ts=4 sts=4 tw=78 ft=vim foldmarker={{{,}}} foldmethod=marker :
-scriptencoding utf-8
 " }}}
 
 " Plugins configuration {{{
+" UI {{{
+    " vim-airline {{{
+    let g:airline_theme='dark'
+    let g:airline_powerline_fonts = 1
+    " Display buffer list in tabline on single tab
+    let g:airline#extensions#tabline#enabled = 1
+    " Enable NrrwRgn integration
+    if exists(expand('~/.config/nvim/plugged/NrrwRgn'))
+        let g:airline#extensions#nrrwrgn#enabled = 1
+    endif
+    " }}}
+
+    " Theme configuration {{{
+    " Handle solarized installed case to prevent error display
+    if filereadable(expand('~/.config/nvim/plugged/vim-colors-solarized/colors/solarized.vim'))
+        colorscheme solarized
+        let g:solarized_termcolors=256
+        let g:solarized_termtrans=1
+        let g:solarized_contrast='normal'
+        let g:solarized_visibility='normal'
+    else
+        colorscheme desert
+    endif
+    set background=dark
+
+    " Themes switches (semantic / parenthesis matching)
+    nnoremap <Leader>s :SemanticHighlightToggle<CR>
+    nnoremap <Leader>m :RainbowParentheses!!<CR>
+    " }}}
+
+    " Indent guide {{{
+    let g:indent_guides_guide_size = 1
+    let g:indent_guides_enable_on_vim_startup = 1
+    " }}}
+
+    " Folding {{{
+
+    " FastFold
+    " Update folds on buffer save
+    let g:fastfold_savehook = 1
+    " Minimum number of line for folding to be enabled
+    let g:fastfold_minlines = 0
+    " TODO : configure syntax folding
+
+    " }}}
+
+    " View management {{{
+    set viewoptions=cursor,folds,slash,unix
+    " }}}
+" }}}
+
 " Versionning / Code Management {{{
     " Nerdtree
     noremap <C-e> :NERDTreeToggle<CR>
@@ -18,12 +68,12 @@ scriptencoding utf-8
 " }}}
 
 " Completion {{{
-    " Deoplete {{{
-        let g:deoplete#enable_at_startup = 1
 
         " Python {{{
         let g:deoplete#sources#jedi#statement_length = 250
         let g:deoplete#sources#jedi#show_docstring = 1
+        let g:deoplete#sources#jedi#enable_typeinfo = 1
+
         " }}}
 
         " C {{{
@@ -34,7 +84,6 @@ scriptencoding utf-8
         " Doc display {{{
         let g:echodoc_enable_at_startup = 1
         " }}}
-    " }}}
 
     " Supertab default completion
     let g:SuperTabDefaultCompletionType = 'context'
@@ -81,16 +130,19 @@ scriptencoding utf-8
         let g:textobj#quote#educate = 1
         " }}}
 
+        " Markdown preview configuration
+        let g:md_pdf_viewer="zathura"
+        let g:md_args="--template eisvogel --listings"
+
         " Autocmds for specific filetypes
         augroup writing_init
             autocmd!
-            autocmd FileType pandoc,markdown,text call pencil#init()
-                        \ | call lexical#init()
+            autocmd FileType pandoc,markdown,text call lexical#init()
                         \ | call litecorrect#init()
                         \ | call textobj#quote#init()
                         \ | call textobj#sentence#init()
         augroup END
-    " }}}
+        " }}}
 
     " HTML / CSS {{{
         " Color picker config
@@ -169,38 +221,6 @@ scriptencoding utf-8
     " }}}
 " }}}
 
-" UI {{{
-    " vim-airline {{{
-    let g:airline_theme='dark'
-    let g:airline_powerline_fonts = 1
-    " Display buffer list in tabline on single tab
-    let g:airline#extensions#tabline#enabled = 1
-    " Enable NrrwRgn integration
-    if exists(expand('~/.config/nvim/plugged/NrrwRgn'))
-        let g:airline#extensions#nrrwrgn#enabled = 1
-    endif
-    " }}}
-
-    " Solarized config {{{
-    " Handle installation case to prevent error display
-    if filereadable(expand('~/.config/nvim/plugged/vim-colors-solarized/colors/solarized.vim'))
-        colorscheme solarized
-        let g:solarized_termcolors=256
-        let g:solarized_termtrans=1
-        let g:solarized_contrast='normal'
-        let g:solarized_visibility='normal'
-    else
-        colorscheme desert
-    endif
-    set background=dark
-    " }}}
-
-    " Indent guide {{{
-    let g:indent_guides_guide_size = 1
-    let g:indent_guides_enable_on_vim_startup = 1
-    " }}}
-" }}}
-
 " Misc {{{
     " Undo tree tab {{{
     if has('persistent_undo')
@@ -222,6 +242,18 @@ scriptencoding utf-8
 
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
     nnoremap ga <Plug>(EasyAlign)
+    " }}}
+
+    " Vimwiki {{{
+    let default_wiki = {}
+    let default_wiki.path = '~/docs/wiki/'
+    let default_wiki.html_template = '~/docs/wiki/exports/template.tpl'
+    let default_wiki.auto_export = 1
+    let default_wiki.auto_toc = 1
+    let default_wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
+    let default_wiki.auto_tags = 1
+    let g:vimwiki_list = [default_wiki]
+    let g:vimwiki_html_header_numbering = 2
     " }}}
 " }}}
 " }}}
