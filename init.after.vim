@@ -7,11 +7,6 @@
     syn include syntax/css/vim-coloresque.vim
 " }}}
 
-" Let's put a smile on that face
-if filereadable(expand('~/.config/nvim/smile.vim'))
-    source ~/.config/nvim/smile.vim
-endif
-
 " Modeline handling {{{
 set modeline
 set modelines=5

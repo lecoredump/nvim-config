@@ -176,7 +176,7 @@ call plug#begin('~/.config/nvim/plugged')
         Plug 'reedes/vim-lexical',            { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
 
         " Markdown preview
-        Plug 'conornewton/vim-pandoc-markdown-preview' { 'for': [ 'markdown', 'pandoc' ] }
+        Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 
         " Writing specific stuff (no more straight quotes, for example)
         Plug 'kana/vim-textobj-user',         { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }

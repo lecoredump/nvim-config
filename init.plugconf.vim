@@ -132,7 +132,7 @@
 
         " Markdown preview configuration
         let g:md_pdf_viewer="zathura"
-        let g:md_args="--template eisvogel --listings"
+        let g:md_args="--template eisvogel --listings -N"
 
         " Autocmds for specific filetypes
         augroup writing_init
