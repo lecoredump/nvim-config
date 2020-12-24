@@ -2,21 +2,15 @@
 " Plugin install / loading.
 " Uses https://github.com/junegunn/vim-plug for plugin management.
 " vim: set sw=4 ts=4 sts=4 tw=78 ft=vim foldmarker={{{,}}} foldmethod=marker :
-scriptencoding utf-8
 " }}}
 
 " Plugin utilities {{{
-    " Installs and sets vim-plug up if not done yet
-    if !filereadable(expand('~/.config/nvim/autoload/plug.vim')) && executable('curl')
-        execute '!mkdir -p ~/.config/nvim/autoload/'
-        execute '!mkdir -p ~/.config/nvim/plugged'
-        execute '!curl -fLo ~/.config/nvim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
-    endif
-
-    " Handle remote plugins
-    function! DoRemote(arg)
-        UpdateRemotePlugins
-    endfunction
+" Installs and sets vim-plug up if not done yet
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
 " }}}
 
@@ -25,299 +19,316 @@ call plug#begin('~/.config/nvim/plugged')
 
 " UI {{{
 
-    " Ruler / statusline {{{
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
-    " }}}
+" Ruler / statusline {{{
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" }}}
 
-    " Colorschemes
-    Plug 'altercation/vim-colors-solarized'
+" Colorschemes
+Plug 'altercation/vim-colors-solarized'
 
-    " Indent level display
-    Plug 'nathanaelkane/vim-indent-guides'
+" Indent level display
+Plug 'nathanaelkane/vim-indent-guides'
 
-    " Folding enhanced
-    Plug 'Konfekt/FastFold'
+" Display information regarding registers
+Plug 'junegunn/vim-peekaboo'
 
-    " Keep cursor and other view information
-    Plug 'zhimsel/vim-stay'
+" Temporary yank highlight, to avoid missing elements
+Plug 'machakann/vim-highlightedyank'
 
-    " Display information regarding registers
-    Plug 'junegunn/vim-peekaboo'
+" Denite {{{
+" Unite ALL THE THINGS (fuzzy search through multiple 'sources')
+Plug 'Shougo/denite.nvim',            { 'do': ':UpdateRemotePlugins' }
 
-    " Denite {{{
-    " Unite ALL THE THINGS (fuzzy search through multiple 'sources')
-    Plug 'Shougo/denite.nvim'
-    " }}}
+" Better fuzzy matcher for denite
+Plug 'raghur/fruzzy',                   { 'do': { -> fruzzy#install() }}
 
-    " Variations {{{
-    " Semantic highlights, each variable its own
-    " TODO adapt colors to solarized colorscheme
-    Plug 'jaxbot/semantic-highlight.vim',    { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
+" Handle yank history, as well as provide a source for denite
+Plug 'Shougo/neoyank.vim'
 
-    " Colored parenthesis pair by pair
-    Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
-    " }}}
+" TODO look into bookmarks
+" Plug 'kmnk/denite-dirmark'
+" }}}
+
+" Variations {{{
+" Semantic highlights, each variable its own
+" TODO adapt colors to solarized colorscheme
+Plug 'jaxbot/semantic-highlight.vim',    { 'on': [ 'SemanticHighlight', 'SemanticHighlightToggle' ] }
+
+" Colored parenthesis pair by pair
+Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
+" }}}
+
+" {{{ Folding & views
+" Keep cursor and other view information
+Plug 'zhimsel/vim-stay'
+
+" Folding enhanced
+Plug 'Konfekt/FastFold'
+
+" Better folding for python
+Plug 'tmhedberg/SimpylFold'
+
+" Only display the "region" you're working on
+Plug 'chrisbra/NrrwRgn'
+
+" }}}
 " }}}
 
 " Versionning / Code management {{{
-    " File / Project browser
-    Plug 'scrooloose/nerdtree',              { 'on': [ 'NERDTree', 'NERDTreeToggle' ] }
+" File / Project browser {{{
+Plug 'Shougo/defx.nvim',            { 'do': ':UpdateRemotePlugins' }
 
-    " Git {{{
-    " Integration
-    Plug 'tpope/vim-fugitive'
+" Rice is always needed
+Plug 'kristijanhusak/defx-git'
+Plug 'kristijanhusak/defx-icons'
 
-    " Commit browser (requires fugitive)
-    Plug 'junegunn/gv.vim'
+" }}}
 
-    " Git integration to NERDTree
-    Plug 'Xuyuanp/nerdtree-git-plugin',      { 'on': [ 'NERDTree', 'NERDTreeToggle' ] }
+" Versioning {{{
+" Gutter display
+Plug 'mhinz/vim-signify'
 
-    " Diff with current HEAD in a gutter
-    Plug 'airblade/vim-gitgutter'
+" Git {{{
+" Integration
+Plug 'tpope/vim-fugitive'
 
-    " Gitlab remotes handling
-    Plug 'shumphrey/fugitive-gitlab.vim'
+" Commit browser (requires fugitive)
+Plug 'junegunn/gv.vim'
 
-    if (filereadable(expand('~/.config/nvim/init.creds.vim')))
-        " Github integration for fugitive
-        " Requires access token in a configuration file
-        Plug 'rhysd/github-complete.vim',    { 'for': [ 'gitcommit', 'markdown' ] }
-    endif
+" Git integration to NERDTree
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
-    " }}}
+" Gitlab remotes handling
+Plug 'shumphrey/fugitive-gitlab.vim'
 
-    if executable('patch')
-        " Single/multi-patch or diff reviews
-        " Requires patch command installed
-        Plug 'junkblocker/patchreview-vim'
-    endif
+if (filereadable(expand('~/.config/nvim/init.creds.vim')))
+    " Github integration for fugitive
+    " Requires access token in a configuration file
+    Plug 'rhysd/github-complete.vim'
+endif
+
+" }}}
+" }}}
+
+if executable('patch')
+    " Single/multi-patch or diff reviews
+    " Requires patch command installed
+    Plug 'junkblocker/patchreview-vim'
+endif
 " }}}
 
 " Tags {{{
-    if executable('ctags')
-        " Coming too close to an IDE maybe ?
-        Plug 'majutsushi/tagbar'
-        Plug 'ludovicchabant/vim-gutentags'
-    endif
+if executable('ctags')
+    " Coming too close to an IDE maybe ?
+    Plug 'majutsushi/tagbar'
+    Plug 'ludovicchabant/vim-gutentags'
+endif
 " }}}
 
 " Completion {{{
-    " Asynchronous completion for neovim {{{
-    if has('nvim')
-        Plug 'Shougo/deoplete.nvim',            { 'do': ':UpdateRemotePlugins' }
-    else
-        Plug 'Shougo/deoplete.nvim'
-        Plug 'roxma/nvim-yarp'
-        Plug 'roxma/vim-hug-neovim-rpc'
-    endif
-    let g:deoplete#enable_at_startup = 1
+" Asynchronous completion for neovim {{{
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim',            { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
 
+" Ctags source for deoplete
+Plug 'deoplete-plugins/deoplete-tag'
 
-    " Ctags source for deoplete
-    Plug 'deoplete-plugins/deoplete-tag'
+" Python source for deoplete
+Plug 'zchee/deoplete-jedi'
 
-    " Python source for deoplete
-    Plug 'zchee/deoplete-jedi',             { 'for': [ 'python', 'htmldjango' ] }
+Plug 'davidhalter/jedi-vim'
 
-    " Vim source for deoplete
-    Plug 'Shougo/neco-vim',                 { 'for': [ 'vim' ] }
+" Vim source for deoplete
+Plug 'Shougo/neco-vim'
 
-    " Perl source for neovim
-    Plug 'c9s/perlomni.vim',                { 'for': [ 'perl' ] }
+" Syntax files as source
+Plug 'Shougo/neco-syntax'
 
-    " C / C++ sources for deoplete
-    Plug 'zchee/deoplete-clang',            { 'for': [ 'c', 'cpp', 'objc', 'objcpp' ] }
+" Perl source for neovim
+Plug 'c9s/perlomni.vim'
 
-    " Filetype context extension for deoplete's sources
-    Plug 'Shougo/context_filetype.vim'
+" C / C++ sources for deoplete
+Plug 'zchee/deoplete-clang'
 
-    " Include sources for deoplete
-    Plug 'Shougo/neoinclude.vim'
+" Filetype context extension for deoplete's sources
+Plug 'Shougo/context_filetype.vim'
 
-    "  Doc sources for deoplete
-    Plug 'Shougo/echodoc.vim'
+" Include sources for deoplete
+Plug 'Shougo/neoinclude.vim'
 
-    " Auto-complete pairs in deoplete
-    Plug 'Shougo/neopairs.vim'
+"  Doc sources for deoplete
+Plug 'Shougo/echodoc.vim'
 
-    " }}}
+" Dictionary source
+Plug 'deoplete-plugins/deoplete-dictionary'
 
-    " Completion with tab
-    Plug 'ervandew/supertab'
+" Auto-complete pairs in deoplete
+Plug 'Shougo/neopairs.vim'
 
-    " Misc completions {{{
-    " Automatic pairing for '"()[]{}
-    Plug 'jiangmiao/auto-pairs'
-    " }}}
+" }}}
+
+" Use neovim's floating window for completion display
+Plug 'ncm2/float-preview.nvim'
+
+" Completion with tab
+Plug 'ervandew/supertab'
+
+" Snippets {{{
+Plug 'SirVer/ultisnips'
+" }}}
+
 " }}}
 
 " Languages / Filetypes {{{
 
-    " Pandoc / Markdown / Latex / Txt / Writing {{{
-        Plug 'vim-pandoc/vim-pandoc',         { 'for': [ 'pandoc', 'markdown' ] }
-        Plug 'vim-pandoc/vim-pandoc-syntax',  { 'for': [ 'pandoc', 'markdown' ] }
-        Plug 'lervag/vimtex',                 { 'for': [ 'tex' ] }
-        Plug 'xuhdev/vim-latex-live-preview', { 'for': [ 'tex' ] }
+" Pandoc / Markdown / Latex / Txt / Writing {{{
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'lervag/vimtex'
+" Latex / markdown preview
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+" Plug 'xuhdev/vim-latex-live-preview', { 'for': [ 'tex' ] }
 
-        " Accentuated characters for those not in your keymap
-        " TODO integrate as in http://junegunn.kr/2014/06/emoji-completion-in-vim/
-        Plug 'airblade/vim-accent',           { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+" Distraction-free writing
+Plug 'junegunn/goyo.vim',             { 'on': [ 'GoyoEnter', 'Goyo' ] }
+Plug 'junegunn/limelight.vim',        { 'on': [ 'Limelight' ] }
 
-        " Distraction-free writing
-        Plug 'junegunn/goyo.vim',             { 'on': [ 'GoyoEnter', 'Goyo' ] }
-        Plug 'junegunn/limelight.vim',        { 'on': [ 'Limelight' ] }
+" "Bad" words highlighting
+Plug 'reedes/vim-wordy',              { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
 
-        " "Bad" words highlighting
-        Plug 'reedes/vim-wordy',              { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+" Extends spell checking
+Plug 'reedes/vim-lexical',            { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
 
-        " Extends spell checking
-        Plug 'reedes/vim-lexical',            { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+" Writing specific stuff (no more straight quotes, for example)
+Plug 'kana/vim-textobj-user',         { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+Plug 'reedes/vim-textobj-quote',      { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+Plug 'reedes/vim-textobj-sentence',   { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+Plug 'reedes/vim-litecorrect',        { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
+" }}}
 
-        " Markdown preview
-        Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+" HTML / CSS {{{
+" Highlights HSLA, RGB (HEX and others) and color names
+Plug 'gorodinskiy/vim-coloresque',
 
-        " Writing specific stuff (no more straight quotes, for example)
-        Plug 'kana/vim-textobj-user',         { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
-        Plug 'reedes/vim-textobj-quote',      { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
-        Plug 'reedes/vim-textobj-sentence',   { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
-        Plug 'reedes/vim-litecorrect',        { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
-    " }}}
+if executable('zenity') || executable('yad')
+    " Color picker, requires either yad or zenity
+    Plug 'KabbAmine/vCoolor.vim'
+endif
 
-    " HTML / CSS {{{
-        " Highlights HSLA, RGB (HEX and others) and color names
-        Plug 'gorodinskiy/vim-coloresque',
+" Convert between utf8 and HTML entities
+Plug 'idbrii/vim-textconv'
 
-        " Emoji completion, because we can
-        Plug 'junegunn/vim-emoji',            { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc'] }
+" Emmet emulation in vim (tag generation)
+Plug 'mattn/emmet-vim'
+" }}}
 
-        if executable('zenity') || executable('yad')
-            " Color picker, requires either yad or zenity
-            Plug 'KabbAmine/vCoolor.vim',     { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc', 'css' ] }
-        endif
+" Python {{{
+" Sort imports using isort utility
+" Requires isort installed : https://github.com/timothycrosley/isort
+Plug 'brentyi/isort.vim'
+" }}}
 
-        " Convert between utf8 and HTML entities
-        Plug 'idbrii/vim-textconv',           { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc' ] }
+" CSV {{{
+Plug 'chrisbra/csv.vim'
+" }}}
 
-        " Emmet emulation in vim (tag generation)
-        Plug 'mattn/emmet-vim',               { 'for': [ 'html', 'htmldjango', 'markdown', 'pandoc' ] }
-    " }}}
+" Nmap syntax {{{
+Plug 'vim-scripts/Nmap-syntax-highlight'
+" }}}
 
-    " Python {{{
-        " Sort imports using isort utility
-        " Requires isort installed : https://github.com/timothycrosley/isort
-        if executable('isort')
-            Plug 'fisadev/vim-isort',         { 'for': [ 'python', 'htmldjango' ] }
-        endif
+" Nginx configuration file syntax {{{
+Plug 'vim-scripts/nginx.vim'
+" }}}
 
-        " Virtual environment handling
-        Plug 'jmcantrell/vim-virtualenv',     { 'for': [ 'python', 'htmldjango' ] }
+" Haproxy configuration file syntax {{{
+Plug 'vim-scripts/haproxy'
+" }}}
 
-        " Better folding for python
-        Plug 'tmhedberg/SimpylFold',          { 'for': [ 'python' ] }
+" Powershell syntax {{{
+Plug 'PProvost/vim-ps1'
+" }}}
 
-        " Proper pep8 indentation scheme
-        Plug 'vim-scripts/indentpython.vim',  { 'for': [ 'python' ] }
-    " }}}
+" Cisco
+Plug 'momota/cisco.vim'
+" }}}
 
-    " CSV {{{
-        Plug 'chrisbra/csv.vim',              { 'for': [ 'csv' ] }
-    " }}}
+" Syntax checking, linting and formatting {{{
+" Programming languages
+Plug 'neomake/neomake'
 
-    " Nmap syntax {{{
-        Plug 'vim-scripts/Nmap-syntax-highlight',          { 'for': [ 'nmap' ] }
-    " }}}
+" Formatting
+Plug 'sbdchd/neoformat'
 
-    " Nginx configuration file syntax {{{
-        Plug 'vim-scripts/nginx.vim',                      { 'for': [ 'nginx' ] }
-    " }}}
+" Writing
+let g:grammalecte_cli_py=exepath('grammalecte-cli')
+if exists("g:grammalecte_cli_py")
+    Plug 'dpelle/vim-Grammalecte'
+endif
 
-    " Haproxy configuration file syntax {{{
-        Plug 'vim-scripts/haproxy',                    { 'for': [ 'haproxy' ] }
-    " }}}
 
-    " Powershell syntax {{{
-        Plug 'PProvost/vim-ps1',                           { 'for': [ 'ps1' ] }
-    " }}}
-
-    " Solidity {{{
-        Plug 'tomlion/vim-solidity'
-    " }}}
-
-    " Cisco
-        Plug 'CyCoreSystems/vim-cisco-ios'
-    " }}}
-
-" Syntax checking {{{
-    " Programming languages
-    Plug 'neomake/neomake'
-
-    " Writing
-    if exists("g:grammalecte_cli_py")
-        Plug 'dpelle/vim-Grammalecte',                     { 'for': [ 'pandoc', 'markdown', 'tex', 'text' ] }
-    endif
 " }}}
 
 " Tim Pope goodness {{{
-    " Handle surrounging chars ('"()[]{}) in an easier fashion
-    Plug 'tpope/vim-surround'
+" Handle surrounging chars ('"()[]{}) in an easier fashion
+Plug 'tpope/vim-surround'
 
-    " Handy bracket mappings
-    Plug 'tpope/vim-unimpaired'
+" Handy bracket mappings
+Plug 'tpope/vim-unimpaired'
 
-    " Commentary handling
-    Plug 'tpope/vim-commentary'
+" Commentary handling
+Plug 'tpope/vim-commentary'
 
-    " Mappings for *ML and templating languages (php, django, jsp...)
-    Plug 'tpope/vim-ragtag',                  { 'for': [ 'xml', 'html', 'htmldjango' ] }
+" Mappings for *ML and templating languages (php, django, jsp...)
+Plug 'tpope/vim-ragtag',                  { 'for': [ 'xml', 'html', 'htmldjango' ] }
 
-    " Handle case swotching, advanced substitutions and abbreviations
-    Plug 'tpope/vim-abolish'
+" Handle case switching, advanced substitutions and abbreviations
+Plug 'tpope/vim-abolish'
 
-    " Repeat ALL THE THINGS (including some Tpope goodness of course)
-    Plug 'tpope/vim-repeat'
+" Repeat ALL THE THINGS (including some Tpope goodness of course)
+Plug 'tpope/vim-repeat'
 " }}}
 
 " Motions {{{
-    " Multiple cursors
-    Plug 'terryma/vim-multiple-cursors'
+" Multiple cursors
+Plug 'terryma/vim-multiple-cursors'
 
-    " Adds new textobjects : pair, quote, separator, argument
-    Plug 'wellle/targets.vim'
+" Adds new textobjects : pair, quote, separator, argument
+Plug 'wellle/targets.vim'
 
-    " Adds target 'after' as a textobject
-    Plug 'junegunn/vim-after-object'
+" Adds target 'after' as a textobject
+Plug 'junegunn/vim-after-object'
 " }}}
 
 " Search {{{
-    " Augmented '/' (requires vim-pseudocl)
-    Plug 'junegunn/vim-pseudocl' | Plug 'junegunn/vim-oblique'
+" Augmented '/' (requires vim-pseudocl)
+Plug 'junegunn/vim-pseudocl' | Plug 'junegunn/vim-oblique'
 " }}}
 
 " Other {{{
 
-    " Undo tree browser
-    Plug 'mbbill/undotree',                  { 'on': 'UndotreeToggle' }
+" Undo tree browser
+Plug 'mbbill/undotree'
 
-    " Text alignment utility
-    Plug 'junegunn/vim-easy-align',          { 'on': [ '<Plug>EasyAlign', 'EasyAlign' ] }
+" Text alignment utility
+Plug 'junegunn/vim-easy-align'
 
-    " Only display the "region" you're working on
-    Plug 'chrisbra/NrrwRgn'
+if executable('task')
+    " Taskwarrior interface
+    Plug 'blindFS/vim-taskwarrior',       { 'on': 'TW' }
+endif
 
-    if executable('task')
-        " Taskwarrior interface
-        Plug 'blindFS/vim-taskwarrior',       { 'on': 'TW' }
-    endif
 
-    " Personal wiki and notes, plus a whole lot of stuff
-    Plug 'vimwiki/vimwiki'
-
-    " ICONS EVERYWHERE, must be loaded last for interaction with other
-    " plugins. Patched fonts : https://github.com/ryanoasis/nerd-fonts
-    " TODO check valid font before loading
-    Plug 'ryanoasis/vim-devicons'
+" ICONS EVERYWHERE, must be loaded last for interaction with other
+" plugins. Patched fonts : https://github.com/ryanoasis/nerd-fonts
+" TODO check valid font before loading
+Plug 'ryanoasis/vim-devicons'
 " }}}
 
 call plug#end()

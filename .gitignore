@@ -69,5 +69,6 @@ tags
 plugged/
 spell/
 .undo/
+.yank_hist
 .netrwhist
 *creds*

@@ -1,0 +1,6 @@
+ipython
+pynvim
+jedi
+yapf
+flake8
+isort
